@@ -1,0 +1,209 @@
+﻿{% extends '../base.htm' %}
+
+{% block content %}
+<div class="oe_banner">
+  <div class="bd">
+    <ul>
+      <li style="background:url('/static/imgs/index/239cb56db7339efa.jpg') no-repeat center top"><a href="#"></a></li>
+      <li style="background:url('/static/imgs/index/84fc0cf8b7f18989.jpg') no-repeat center top"><a href="#"></a></li>
+    </ul>
+  </div>
+  <div class="hd">
+    <ul>
+      <li><span></span></li><li><span></span></li>    </ul>
+  </div>
+  <div class="banner_bg"></div>
+</div>
+<script type="text/javascript">
+  jQuery(".oe_banner").slide({mainCell:".bd ul",autoPlay:true});
+</script>
+
+<div class="oe_newusrer">
+  <div class="oe_nuser">
+    <div class="hd">
+      <b>推荐会员</b>
+      <ul>
+        <li class="on"><span>最新</span></li>
+        <li><span>VIP</span></li>
+        <li><span>美女</span></li>
+        <li><span>俊男</span></li>
+      </ul>
+      <div class="clear"></div>
+    </div>
+    <div class="bd drop">
+      <div>
+          <!-- <dl class="cin">
+            <dt><a href="/index/memberdetail/{{ u.id }}/" target="_blank"><img src="/static/imgs/avatar_big.jpg.thumb.jpg" /></a></dt>
+            <dd>
+              <h3><a href="/index/memberdetail/{{ u.id }}/" target="_blank">晴天一色</a></h3>
+              <p class="p_1">
+              <span>绍兴 </span>
+              <label>175CM</label>
+              <br>
+              5000~10000元/月</p>
+              <p class="btn">
+                <span onClick="artbox_hi('162095');"><i></i>打招呼</span>
+              </p>
+            </dd>
+            <div class="clear"></div>
+          </dl>-->
+          {% for u in userinfos %}
+          <dl class="cin">
+            <dt>
+              <a href="/index/memberdetail/{{ u.id }}/" target="_blank">
+              {% if u.img %}
+              <img src="/{{ u.img}}" /></a>
+              {% else %}
+                {% if u.gender %}
+                  <img src="/static/imgs/img/gender_1.gif" /></a>
+                {% else %}
+                  <img src="/static/imgs/img/gender_2.gif" /></a>
+                {% endif %}
+              {% endif %}
+            </dt>
+            <dd>
+              <h3><a href="/index/memberdetail/{{ u.id }}/" target="_blank">{{ u.login_id.username }}</a></h3>
+              <p class="p_1">
+              <span>{{ u.live_area}}</span>
+              <label>{{ u.height }}CM</label>
+              <br>
+              {{ u.salary }}</p>
+              <p class="btn">
+                <span onClick="artbox_hi('162095');"><i></i>打招呼</span>
+              </p>
+            </dd>
+            <div class="clear"></div>
+          </dl>
+          {% endfor %}
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript">
+    jQuery(".oe_nuser").slide({trigger:"click"});
+  </script>
+</div>
+
+<div class="oe_party">
+  <div class="top"></div>
+  <div class="hd">
+     相亲活动
+     <span></span>
+     <img src="/static/imgs/index/p_4.png"/>
+     <a href="/index.php?c=party" class="so">更多</a>
+  </div>
+  <div class="bd drop">
+         
+    <dl class="cin dl_1  on ">
+      <dt><a href="/index.php?c=party&a=detail&id=3" target="_blank"><img src="/data/attachment/party/201712/07/1cee5244de2b7019.jpg.thumb.jpg"  /></a></dt>
+      <dd class="sub"    ">
+        <h3><a href="/index.php?c=party&a=detail&id=3"><a href="/index.php?c=party&a=detail&id=3" target="_blank" title="名流时尚派对：形象改造+单身交友，我换个造型爱上你">名流时尚派对：形象改造+单身交友，我换个造型爱上你</a></a></h3>
+        <p>截止报名：2018/05/07 15:00</p>
+        <p> 名流时尚派对：形象改造+单身交友，我换个造型爱上你   
+…</p>
+                <a href="/index.php?c=party&a=detail&id=3" class="more">活动<br>结束</a>
+                <a href="/index.php?c=party&a=detail&id=3" class="go"></a>
+      </dd>
+      <div class="clear"></div>
+    </dl>
+     
+    <dl class="cin dl_2 ">
+      <dt><a href="/index.php?c=party&a=detail&id=2" target="_blank"><img src="/data/attachment/party/201712/07/134de700021fbda8.png.thumb.jpg"  /></a></dt>
+      <dd class="sub"   style="display:none;">
+        <h3><a href="/index.php?c=party&a=detail&id=2"><a href="/index.php?c=party&a=detail&id=2" target="_blank" title="11.11光棍节，您找到您的另一半了吗？">11.11光棍节，您找到您的另一半了吗？</a></a></h3>
+        <p>截止报名：2017/12/07 00:00</p>
+        <p>
+
+ 11.11光棍节，您找到您的另一半了吗？
+ 创世…</p>
+                <a href="/index.php?c=party&a=detail&id=2" class="more">活动<br>结束</a>
+                <a href="/index.php?c=party&a=detail&id=2" class="go"></a>
+      </dd>
+      <div class="clear"></div>
+    </dl>
+     
+    <dl class="cin dl_3 ">
+      <dt><a href="/index.php?c=party&a=detail&id=1" target="_blank"><img src="/data/attachment/party/201712/07/167b00aa86c79b06.jpg"  /></a></dt>
+      <dd class="sub"   style="display:none;">
+        <h3><a href="/index.php?c=party&a=detail&id=1"><a href="/index.php?c=party&a=detail&id=1" target="_blank" title="【2018年12月01日】“遇见你，遇见爱”天河公园相亲活动">【2018年12月01日】“遇见你，遇见爱”天河公园相亲活动</a></a></h3>
+        <p>截止报名：2018/11/10 12:00</p>
+        <p>【活动主题】   【2017年5月20日】“边走边爱”天河公…</p>
+                <a href="/index.php?c=party&a=detail&id=1" class="more">我要<br>报名</a>
+                <a href="/index.php?c=party&a=detail&id=1" class="go"></a>
+      </dd>
+      <div class="clear"></div>
+    </dl>
+        <div class="clear"></div>
+  </div>
+  <div class="bottom"></div>
+</div>
+
+<script type="text/javascript">
+  jQuery(".oe_party").slide({ type:"menu", titCell:".nLi", targetCell:".sub",effect:"slideDown",delayTime:300,triggerTime:0,returnDefault:true});
+</script>
+
+<div class="oe_story">
+  <div class="top"></div>
+  <div class="oe_storycon">
+    <div class="hd">
+      成功案例
+      <span></span>
+      <img src="/static/imgs/index/p_6.png" alt="" />
+      <a href="/index.php?c=case" class="so">更多</a>
+    </div>
+    <div class="bd">
+      	        <dl class="dl_1 nLi  on ">
+        <dt><a href="/index.php?c=case&a=detail&id=4"><img src="/data/attachment/story/201712/07/55c3837197faf28f.jpg.thumb.jpg" /></a></dt>
+        <dd class="sub" >
+          <p class="p_1"></p>
+          <div>
+            <h3><a href="#">这就是我老婆</a></h3>
+            <p>目前状态：恋爱了</p>
+            <p class="p_2"><a href="/index.php?c=case&a=detail&id=4">查看详情</a></p>
+          </div>
+        </dd>
+      </dl>
+            <dl class="dl_2 nLi ">
+        <dt><a href="/index.php?c=case&a=detail&id=3"><img src="/data/attachment/story/201712/07/d528d3ae8ceea898.jpg.thumb.jpg" /></a></dt>
+        <dd class="sub"  style="display:none;" >
+          <p class="p_1"></p>
+          <div>
+            <h3><a href="#">幸福的真谛</a></h3>
+            <p>目前状态：恋爱了</p>
+            <p class="p_2"><a href="/index.php?c=case&a=detail&id=3">查看详情</a></p>
+          </div>
+        </dd>
+      </dl>
+            <dl class="dl_3 nLi ">
+        <dt><a href="/index.php?c=case&a=detail&id=2"><img src="/data/attachment/story/201712/07/3c8b945bc28d526e.jpg.thumb.jpg" /></a></dt>
+        <dd class="sub"  style="display:none;" >
+          <p class="p_1"></p>
+          <div>
+            <h3><a href="#">我们要结婚了</a></h3>
+            <p>目前状态：结婚了</p>
+            <p class="p_2"><a href="/index.php?c=case&a=detail&id=2">查看详情</a></p>
+          </div>
+        </dd>
+      </dl>
+            <dl class="dl_4 nLi ">
+        <dt><a href="/index.php?c=case&a=detail&id=1"><img src="/data/attachment/story/201712/07/1c25d67c50744558.jpg" /></a></dt>
+        <dd class="sub"  style="display:none;" >
+          <p class="p_1"></p>
+          <div>
+            <h3><a href="#">张先生和王小姐的爱情故事</a></h3>
+            <p>目前状态：恋爱了</p>
+            <p class="p_2"><a href="/index.php?c=case&a=detail&id=1">查看详情</a></p>
+          </div>
+        </dd>
+      </dl>
+            <div class="clear"></div>
+    </div>
+  </div>
+  <div class="bottom"></div>
+</div>
+{% endblock %}
+
+{% block footer_script %}
+<script type="text/javascript">
+  jQuery(".oe_story").slide({ type:"menu", titCell:".nLi", targetCell:".sub",effect:"slideDown",delayTime:300,triggerTime:0});
+</script>
+{% endblock %}

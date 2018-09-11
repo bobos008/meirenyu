@@ -1,0 +1,233 @@
+﻿{% extends '../base.htm' %}
+ 
+ {% block content %}
+ <div class="oe_party_list">
+  <div class="left">
+    <div class="hd">
+      <ul>
+        <li  class="current">
+          <a href="#">全部</a>
+        </li>
+        <li >
+          <a href="#">免费活动</a>
+        </li>
+        <li >
+          <a href="#">相亲</a>
+        </li>
+      </ul>
+      
+      <!--<div class="oe_psearch">
+          <form id="party_form" action="/index.php" method="get">
+              <input type="hidden" id="c" name="c" value="party" >
+          <input type="hidden" id="s_catid" name="s_catid" value="0" >
+              <select name='s_area1' id='s_area1' onchange="fetch_city('s_area1', 's_area2', '0', '=不限=', '0', '', '0');"><option value=''>=不限=</option><option value='9'>广东</option><option value='33'>江苏</option><option value='57'>浙江</option><option value='85'>福建</option><option value='98'>湖南</option><option value='122'>湖北</option><option value='152'>山东</option><option value='177'>辽宁</option><option value='198'>吉林</option><option value='218'>云南</option><option value='233'>四川</option><option value='252'>安徽</option><option value='271'>江西</option><option value='286'>黑龙江</option><option value='306'>河北</option><option value='326'>陕西</option><option value='336'>海南</option><option value='342'>河南</option><option value='362'>山西</option><option value='374'>内蒙古</option><option value='392'>广西</option><option value='405'>贵州</option><option value='416'>宁夏</option><option value='421'>青海</option><option value='427'>新疆</option><option value='445'>西藏</option><option value='449'>甘肃</option><option value='463'>台湾</option><option value='469'>香港</option><option value='471'>澳门</option><option value='473'>国外</option><option value='475'>其他</option></select>
+            <span id='s_area1' class='f_red'></span>
+            <span id="json_s_area2">
+              <select name="s_area2" id="s_area2"><option value="">请选择</option></select>
+            </span>
+            排序：
+            <select name="s_orderby" id="s_orderby">
+                <option value="">--</option>
+                <option value="1" >最新报名</option>
+                <option value="2" >最新发布</option>
+            </select>
+          </form>
+      </div>-->
+    </div>
+    <div class="bd">
+      {% for activity in activityinfos %}
+      <dl>
+        <dt>
+          <h3>
+           <a href="/index/activitydetail/{{ activity.id }}/">{{ activity.title }}</a>
+          </h3>
+          <div class="img">
+            <a href="/index/activitydetail/{{ activity.id }}/" class="head"><img src="/{{ activity.cover }}" /></a>
+            <p>
+              活动时间：{{ activity.pub_date }} 至 {{ activity.endtime }} <!--<label>已报名1人</label>-->
+            </p>
+            <span class="ico current"></span>
+          </div>
+        </dt>
+        <dd>
+          <p class="p_1">{{ activity.introduce }}</p>
+          <p class="btn">
+            截止报名：{{ activity.endtime }}<label><i></i>{{ activity.region }}</label>             
+            <a href="/index/activitydetail/{{ activity.id }}/" class="current">查看详情</a>
+          </p>
+        </dd>
+      </dl>
+      {% endfor %}
+
+      <dl>
+        <dt>
+          <h3>
+            <a href="/index.php?c=party&a=detail&id=1">【2018年12月01日】“遇见你，遇见爱”天河公园相亲活动</a>
+          </h3>
+          <div class="img">
+            <a href="/index.php?c=party&a=detail&id=1" class="head"><img src="/data/attachment/party/201712/07/167b00aa86c79b06.jpg" /></a>
+            <p>
+              活动时间：2018-12-01 10:00 至 2018-12-01 12:00 <label>已报名1人</label>
+            </p>
+            <span class="ico"> </span>
+          </div>
+        </dt>
+        <dd>
+          <p class="p_1">【活动主题】   【2017年5月20日】“边走边爱”天河公园免费相亲活动 啊啊【活动简介】主办单位：OElove交友网站官方网站：http://e.oephp.com   活动地点：广州市天河区天河公园广场   活动时间：2017年05月20号 13：00~17：00  报名时间：2017年04月20日~2017年05月19号   </p>
+          <p class="btn">
+            截止报名：2018-11-10    <label><i></i></label> 
+                        <a href="/index.php?c=party&a=detail&id=1">我要报名</a>
+                      </p>
+        </dd>
+      </dl>
+       
+          </div>
+      </div>
+  <div class="right">
+    <!--<div class="oe_newbm">
+      <div class="hd">最新报名</div>
+      <div class="bd">
+        <div class="line"></div>
+                        <dl>
+          <dt>
+              <span><i></i>
+                01-18
+              </span>
+          </dt>
+          <dd>
+            <a href="#" class="head"><img src="/data/attachment/avatar/201801/21/162347/avatar_big.jpg.thumb.jpg" alt="" /></a>
+            <h3>醉清风</h3>
+            <p>报名了活动<a href="/index.php?c=party&a=detail&id=3">名流时尚派对：形象改造+单身交友，我换个造型爱上你</a>;</p>
+          </dd>
+        </dl>
+              </div>
+    </div>-->
+    <div class="oe_partyhelp">
+      <div class="hd">活动帮助</div>
+      <div class="bd">
+        <dl>
+          <dt>1</dt>
+          <dd>
+            <h3>报名活动</h3>
+            <p>找到感兴趣的活动，提交报名信息；</p>
+          </dd>
+        </dl>
+        <dl>
+          <dt>2</dt>
+          <dd>
+            <h3>支付费用</h3>
+            <p>在线支付活动费用，也可以参加活动时现场支付；</p>
+          </dd>
+        </dl>
+        <dl>
+          <dt>3</dt>
+          <dd>
+            <h3>准时参加活动</h3>
+            <p>现场签到，参加相亲活动；</p>
+          </dd>
+        </dl>
+        <dl>
+          <dt>4</dt>
+          <dd>
+            <h3>活动结束</h3>
+            <p>有心仪的对象，进一步交往。</p>
+          </dd>
+        </dl>
+      </div>
+    </div>
+    
+    <div class="oe_contact">
+      <div class="hd">联系我们</div>
+      <div class="bd">
+        {% for company in companyinfos %}
+        <dl>
+          <dt><span><i class="ico_1"></i>电话：</span></dt>
+          <dd>{{ company.phone }}</dd>
+        </dl>
+        <dl>
+          <dt><span><i class="ico_2"></i>邮箱：</span></dt>
+          <dd>{{ company.email }}</dd>
+        </dl>
+        <dl>
+          <dt><span><i class="ico_3"></i>地址：</span></dt>
+          <dd>
+            <!--河南省郑州市莞城区航海东路美林河畔9号楼1502<br />-->
+            {{ company.site }}<br />
+          </dd>
+        </dl>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  <div class="clear"></div>
+</div>
+
+<script>
+    function jumpArea() {
+        $s_area1 = $("#s_area1").val();
+        $s_area1 = parseInt($s_area1);
+        $s_area2 = $("#s_area2").val();
+        if (typeof($s_area2) == "undefined") {
+            $s_area2 = 0;
+        }
+        else {
+            $s_area2 = parseInt($s_area2);
+        }
+        if ($s_area2 > 0) {
+            $("#party_form").submit();
+        }
+    }
+    $(function(){
+        //地区
+        $(document).on("change", "#s_area2", function(){
+            $_val = $(this).find("option:selected").val();
+            if ($_val.length > 0) {
+                $("#party_form").submit();
+            }
+        });
+        //排序
+        $(document).on("change", "#s_orderby", function(){
+            $_val = $(this).find("option:selected").val();
+            if ($_val.length > 0) {
+                $("#party_form").submit();
+            }
+        });
+    });
+
+</script>
+{% endblock %}
+
+{% block footer_script %}
+<script type='text/javascript'>
+//WAP提醒
+$(function(){
+    var x = 10;  
+    var y = 20;
+    $("a.waptips").mouseover(function(e){
+           this.myTitle = this.title;
+        this.title = "";    
+        var tooltip = "<div id='waptips'>"+ this.myTitle +"<\/div>"; //创建 div 元素
+        $("body").append(tooltip);    //把它追加到文档中
+        $("#waptips")
+            .css({
+                "top": (e.pageY+y) + "px",
+                "left": (e.pageX+x)  + "px"
+            }).show("fast");      //设置x坐标和y坐标，并且显示
+    }).mouseout(function(){        
+        this.title = this.myTitle;
+        $("#waptips").remove();   //移除 
+    }).mousemove(function(e){
+        $("#waptips")
+            .css({
+                "top": (e.pageY+y) + "px",
+                "left": (e.pageX+x)  + "px"
+            });
+    });
+})
+
+jQuery(".drop").slide({ type:"menu", titCell:".cin", targetCell:".sub",effect:"slideDown",delayTime:300,triggerTime:0,defaultPlay:false,returnDefault:true});
+
+</script>
+
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"7","bdPos":"right","bdTop":"100"},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+{% endblock %}

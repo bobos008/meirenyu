@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>会员登录-交友-美人鱼实名制社交平台</title>
+<meta name="description" content="" />
+<meta name="keywords" content="" />
+<meta name="author" content="OEdev" />
+<meta name="generator" content="OElove" />
+<link rel="stylesheet" href="/static/css/login/jdlogin.css" />
+<link rel="stylesheet" href="/static/css/detail/style.css" />
+<link rel="stylesheet" href="/static/css/login/style.css" />
+<link rel="stylesheet" href="/static/css/login/oe_varpop.css" />
+{% block add_css %}
+{% endblock %}
+<script type='text/javascript'>
+var _ROOT_PATH = "/";
+</script>
+<script type='text/javascript' src='/static/js/jquery.min.js'></script>
+<script type='text/javascript' src='/static/js/public.js'></script>
+<script type="text/javascript" src='/static/js/artdialog/jquery.artDialog.source.js?skin=default'></script>
+<script type="text/javascript" src='/static/js/artdialog/plugins/iframeTools.js'></script>
+<script type='text/javascript' src='/static/js/artbox.js'></script>
+<script type='text/javascript' src='/static/js/ajax.js'></script>
+<script type='text/javascript' src='/static/js/ajax.extend.js'></script>
+<script type="text/javascript" src='/static/js/WdatePicker.js'></script>
+<script type="text/javascript" src="/static/js/jquery.slide.js"></script>
+<script type="text/javascript" src="/static/js/jquery.slideui.js"></script>
+<script type="text/javascript" src="/static/js/oe_varpop.js"></script>
+<script type="text/javascript" src="/static/js/jquery.SuperSlide.2.1.1.js"></script>
+<script type="text/javascript" src="/static/js/search.js"></script>
+</head>
+<body>
+<div class="nav0">
+<div class="oe_top">
+  <div class="oe_topcon">
+    <div class="left">欢迎来到交友-美人鱼实名制社交平台</div>
+    <div class="right drop">
+      <div class="login">
+        {% if username %}
+        欢迎您：<span>{{ username }}</span>
+        <a href="/user/usercenter/">会员中心</a>
+        &nbsp;&nbsp;|&nbsp;&nbsp;
+        <a href="/user/homepage/{{ username }}/">我的主页</a>
+        &nbsp;&nbsp;|&nbsp;&nbsp;
+        <a href="/login/loginout/">退出登录</a>
+        {% else %}
+          <a class="a_1" href="/login/login/"  class="alogin"  rel="nofollow">登录</a><a  rel="nofollow" class="a_2" href="/login/register/" class="areg">注册</a>
+        {% endif %} 
+      </div>
+    <!-- <dl class="cin">
+        <dt><i></i>手机版</dt>
+        <dd class="sub">
+          <img src="../imgs/cf659eb259c1c7c9.png" width="120px" />
+          <p>扫一扫 手机交友</p>
+        </dd>
+      </dl>
+	  <dl class="cin">
+        <dt><i></i>APP下载</dt>
+        <dd class="sub">
+          <img src="/app.png" width="120px" />
+          <p>扫一扫下载手机APP版</p>
+        </dd>
+    </dl> -->
+    </div>
+    <div class="clear"></div>
+  </div>
+</div>
+<div class="oe_nav">
+  <div class="oe_navcon">
+    <div class="logo">
+      <a href="/index/index/"><img class="logo" src="/static/imgs/af2fd4189e57d405.jpg"  alt="交友-美人鱼实名制社交平台" /></a><img class="line" src="/tpl/templets/default/images/line.png" alt="" />
+      <div class="clear"></div>
+    </div>
+    <div class="menu">
+      <ul>
+        <li><a href="/index/index/">首页</a></li>
+        <li><a href="/index/member">会员</a> </li>
+        <li><a href="/index/activity/">活动</a> </li>
+        <!--<li><a href="/index.php?c=diary">商务信息</a></li>-->
+        <li><a href="/login/login/">会员公告</a></li>
+		    <li><a href="/index/successcase/">成功案例</a></li>
+        <li><a href="/index/newsreading/">防骗中心</a></li>
+      </ul>
+    </div>
+    <div class="clear"></div>
+  </div>
+</div>
+</div>
+<div style="height:140px;"></div>
+
+{% block content %}{% endblock %}
+
+<div class="oe_footer">
+    <div class="oe_footercon">
+      <div class="er">
+        <!-- <h3>微信扫一扫下载APP</h3>
+        <img src="/app.png" width="120px" /> -->
+      </div>
+      <div class="fast">
+        <h3>快速链接</h3>
+        <ul>
+          <li><a rel="nofollow" href="/index/aboutus/">关于我们</a></li>
+          <li><a rel="nofollow" href="/index/privacyprotect/">保护隐私</a></li>
+          <li><a rel="nofollow" href="/index/contactus/">联系我们</a></li>
+          <li><a rel="nofollow" href="/index/recruit/">加入我们</a></li>
+          <li><a rel="nofollow" href="/index/disclaimer/">免责申明</a></li>
+          <li><a rel="nofollow" href="/index/notes/">交友须知</a></li>
+          <li><a rel="nofollow" href="/index/index/">返回首页</a></li>
+        </ul>
+      </div>
+      <div class="right">
+        <h3>会员服务</h3>
+        智度有限公司版权所有 &copy; 2017-<span id="footer-copyright-year">2018</span>
+        <br/>
+              <a href="http://www.miitbeian.gov.cn/" target="_blank">粤ICP备18004738号</a>
+                    <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_5179333'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/stat.php%3Fid%3D5179333%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+      </div>
+      <div class="clear"></div>
+    </div>
+  </div>
+  <script>
+
+  </script>
+  {% block footer_script %}{% endblock %}
+  </body>
+  </html>

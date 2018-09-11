@@ -1,0 +1,168 @@
+﻿{% extends '../base.htm' %}
+{% block content %}
+<div class="oe_main">
+  <div class="oe_party_detail">
+    <h1>{{ activityinfo.title }}</h1>
+    <dl class="head">
+      <dt><img src="/{{ activityinfo.cover }}" /></dt>
+      <dd class="dd_1">
+        <ul>
+          <li class="hidden"> 
+            <span>地点：</span>{{ activityinfo.region}}
+          </li>
+          <li>
+            <span>时间：</span>{{ activityinfo.pub_date }} - {{ activityinfo.endtime }}
+          </li>
+          <!--<li>
+            <span>费用：</span>
+            <label>￥0.10</label>
+          </li>-->
+          <li class="nums">
+            <span>人数：</span>
+            <span class="span_1"> 男：<em>100 </em>人<em></em> (已报<em>{{ activityinfo.mancount }}</em>人) </span> <span class="span_2"> 
+            <br/>
+            &#12288;&#12288;&#12288; 女：<em>100</em> 人 <em></em> (已报<em>{{ activityinfo.womancount }}</em>人) </span>
+          </li>
+          <li class="btn">
+           <span f="pop_open_partybm" data-id="7"><em></em>我要报名</span>
+          </li>
+        </ul>
+        </div>
+      </dd>
+      <!--<dd class="dd_2">
+        <h3><span class="jiao"></span>快速报名</h3>
+        <p class="p_1"><img src="https://e.oephp.com/index.php?c=scan&a=scan&mod=party&id=7&r=1535452659&size=8" /></p>
+        <p class="p_4">
+          手机扫一扫  快速报名
+        </p>
+      </dd>-->
+      <div class="clear"></div>
+    </dl>
+            
+        <div class="partydetail_content">
+      <div class="leftcontent">
+        <div class="layui-tab layui-tab-brief party_content" lay-filter="docDemoTabBrief">
+          <ul class="layui-tab-title">
+            <li class="layui-this">活动详情</li>
+          </ul>
+          <div class="layui-tab-content">
+            {{ activityinfo.content|safe }}
+          </div>
+        </div> 
+
+    <script>
+      layui.use('element', function(){
+        var $ = layui.jquery
+        ,element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+      });
+    </script>
+
+      </div>
+      <div class="righttips">
+        <!--<div class="oe_partymap">
+          <div class="hd"><span>活动地点</span></div>
+          <div class="bd" id="oe_mapcont"></div>
+        </div>-->
+        <dl>
+          <dt>
+            <span>1</span>报名活动
+          </dt>
+          <dd>
+            <p>找到感兴趣的活动，提交报名信息；</p>
+          </dd>
+        </dl>
+        <dl>
+          <dt>
+            <span>2</span>支付费用
+          </dt>
+          <dd>
+            <p>在线支付费用，也可以参加活动时现场支付；</p>
+          </dd>
+        </dl>
+        <dl>
+          <dt>
+            <span>3</span>准时参加活动
+          </dt>
+          <dd>
+            <p>现场签到，参加相亲活动；</p>
+          </dd>
+        </dl>
+        <dl>
+          <dt>
+            <span>4</span>活动结束
+          </dt>
+          <dd>
+            <p>有心仪的对象，进一步交往。</p>
+          </dd>
+        </dl>
+      </div>
+      <div class="clear"></div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block footer_script %}
+<script type="text/javascript"> 
+$(function() { 
+  $("#qqkf_scroll").fix({
+            float : 'right',
+                        skin : 'blue',
+            durationTime : 600
+  });
+});
+</script> 
+<script type="text/javascript">
+$(function(){
+    jQuery(".drop").slide({ type:"menu", titCell:".down", targetCell:".sub",effect:"slideDown",delayTime:300,triggerTime:0,defaultPlay:false,returnDefault:true});
+    $('.addcurrent').hover(
+      function(){
+       $(this).addClass('current')
+      },
+      function(){
+       $(this).removeClass('current')
+      }
+    );
+});
+</script>
+<input type="hidden" id="partyid" value="7" />
+<script src="https://e.oephp.com/tpl/templets/v5/js/party.js?r=1535452660"></script>
+
+<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=d9jat2VxBFnIEWKGs2NaxAowYXDvlzal"></script>
+<script type="text/javascript">
+function _getMap($lng, $lat, $address, $mapid) {
+	var map_obj = ""; //地图对象
+	var map_point = ""; //坐标对象
+	var map_marker = ""; //标注对象
+	map_obj = new BMap.Map($mapid);
+	if ($lng.length > 0 && $lat.length > 0) {
+		map_point = new BMap.Point($lng, $lat);
+		map_obj.centerAndZoom(map_point, 17);
+	}
+	else {
+		if ($address.length > 0) {
+			map_obj.centerAndZoom($address, 17);
+		}
+	}
+	map_obj.addControl(new BMap.NavigationControl()); // 添加平移缩放控件
+	map_obj.addControl(new BMap.ScaleControl()); // 添加比例尺控件
+	map_obj.addControl(new BMap.OverviewMapControl()); //添加缩略地图控件
+	map_obj.enableScrollWheelZoom(); //启用滚轮放大缩小
+	map_obj.addControl(new BMap.MapTypeControl()); //添加地图类型控件放按
+
+	if ($lng.length > 0 && $lat.length > 0) {
+		map_marker = new BMap.Marker(new BMap.Point($lng, $lat));
+		map_marker.enableDragging();
+		map_obj.addOverlay(map_marker);
+		
+		/*
+		var infoWindow = new BMap.InfoWindow("【白领专场】名流时尚派对：形象改造+单身交友，我换个造型爱上你<br/>地址：湖北 武汉 武昌阅马场广场");  // 创建信息窗口对象
+		map_obj.openInfoWindow(infoWindow,map_point); //开启信息窗口
+		*/
+	}
+}
+$(function(){
+	_getMap("113.368509", "23.130358", "湖北 武汉", "oe_mapcont");
+});
+</script>
+{% endblock %}

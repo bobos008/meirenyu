@@ -1,0 +1,936 @@
+<!doctype html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if gt IE 8]><![endif]-->
+<html class="no-js" lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="author" content="OEdev" />
+<meta name="generator" content="OElove" />
+<title>修改资料-OElove V5.0免费版演示-Powered By OElove</title>
+<link href="/tpl/static/varpop/css/oe_varpop.css" rel="stylesheet" />
+<link href="/tpl/user/css/css.css" rel="stylesheet" />
+<script type='text/javascript'>
+var _ROOT_PATH = "/";
+</script>
+<script type="text/javascript" src='/tpl/static/js/jquery.min.js'></script>
+<script type="text/javascript" src='/tpl/static/js/artdialog/jquery.artDialog.source.js?skin=default'></script>
+<script type="text/javascript" src='/tpl/static/js/artdialog/plugins/iframeTools.js'></script>
+<script type="text/javascript" src='/tpl/static/js/public.js'></script>
+<script type="text/javascript" src='/tpl/static/js/ajax.js'></script>
+<script type="text/javascript" src='/tpl/static/js/artbox.js'></script>
+<script type="text/javascript" src='/tpl/static/js/WdatePicker.js'></script>
+<script type="text/javascript" src="/tpl/static/varpop/oe_varpop.js"></script>
+<script type="text/javascript" src="/tpl/templets/default/js/jquery.SuperSlide.2.1.1.js"></script>
+<!--[if lt IE 7]>
+<script type='text/javascript' src='/tpl/static/js/DD_belatedPNG-min.js'></script>
+<script>
+DD_belatedPNG.fix('.user_logo, .shadow');
+</script>
+<![endif]-->
+<script type='text/javascript'>
+$(function() {
+    $(window).scroll(function() {
+        var explorer = window.navigator.userAgent;
+        var scrollTops = 0;
+        if (explorer.indexOf("Chrome") >= 0 || explorer.indexOf("Safari") >= 0) {
+            var scrollTops = document.body.scrollTop;
+        } else {
+            scrollTops = document.documentElement.scrollTop;
+        }
+        if (parseInt(scrollTops) >= 70) {
+            $(".right_kj").slideDown("slow");
+        } else {
+            $(".right_kj").slideUp("slow");
+        }
+    });
+});
+
+//关注状态
+function obj_listen_status(uid, tipsid) {
+	if (uid > 0) {
+		$.ajax({
+			type: "POST",
+			url: _ROOT_PATH + "usercp.php?c=listen",
+			cache: false,
+			data: {a:"getlisten", halttype:"ajax", uid:uid, tipsid:tipsid, r:get_rndnum(8)},
+			dataType: "json",
+			success: function(data) {
+				var json = eval(data);
+				var flag = json.flag;
+				if (tipsid != '') {
+					if (flag == '1') {
+						$("#"+tipsid).html("<a href=\"###\" class=\"pcbtn-coff\" onclick=\"obj_action_listen('"+uid+"', 'cancel', '"+tipsid+"');\">取消关注</a>");
+					}
+					else {
+						$("#"+tipsid).html("<a href=\"###\" class=\"pcbtn-green\" onclick=\"obj_action_listen('"+uid+"', 'listen', '"+tipsid+"');\">+加关注</a>");
+					}
+				}
+			},
+			error: function() {
+
+			}
+		});
+	} 
+}
+
+//拉黑状态
+function obj_black_status(uid, tipsid) {
+	if (uid > 0) {
+		$.ajax({
+			type: "POST",
+			url: _ROOT_PATH + "usercp.php?c=listen",
+			cache: false,
+			data: {a:"getlisten", halttype:"ajax", uid:uid, tipsid:tipsid, r:get_rndnum(8)},
+			dataType: "json",
+			success: function(data) {
+				var json = eval(data);
+				var flag = json.flag;
+				if (tipsid != '') {
+					if (flag == '2') {
+						//已拉黑
+						$("#"+tipsid).html("<a href=\"###\" class=\"pcbtn-green\" onclick=\"obj_action_listen('"+uid+"', 'listen', '"+tipsid+"');\">+加关注</a>");
+					}
+					else {
+						//未拉黑
+						$("#"+tipsid).html("<a href=\"###\" class=\"pcbtn-coff\" onclick=\"obj_action_listen('"+uid+"', 'black', '"+tipsid+"');\">拉黑名单</a>");
+					}
+				}
+			},
+			error: function() {
+
+			}
+		});
+	} 
+}
+
+//操作好友 加关注、拉黑、取消
+function obj_action_listen (uid, action, tipsid) {
+	if (uid > 0) {
+		$.ajax({
+			type: "POST",
+			url: _ROOT_PATH + "usercp.php?c=listen",
+			cache: false,
+			data: {a:action, halttype:"ajax", fuid:uid, tipsid:tipsid, r:get_rndnum(8)},
+			dataType: "json",
+			success: function(data) {
+				var json = eval(data);
+				var type = json.type;
+				var flag = json.flag;
+				var error = json.error;
+				if (tipsid != '') {
+					//加关注
+					if (type == 'listen') {
+						if (error.length==0) {
+							if (flag == '1') {
+								$("#"+tipsid).html("<a href=\"###\" class=\"pcbtn-coff\" onclick=\"obj_action_listen('"+uid+"', 'cancel', '"+tipsid+"');\">取消关注</a>");
+							}
+						}
+						else {
+							alert(error);
+						}
+					}
+					//取消关注
+					if (type == 'cancel') {
+						if (error.length==0) {
+							if (flag == '1') {
+								$("#"+tipsid).html("<a href=\"###\" class=\"pcbtn-green\" onclick=\"obj_action_listen('"+uid+"', 'listen', '"+tipsid+"');\">+加关注</a>");
+							}
+						}
+						else {
+							alert(error);
+						}
+					}
+					//拉黑名单
+					if (type == 'black') {
+						if (error.length==0) {
+							if (flag == '1') {
+								$("#"+tipsid).html("<a href=\"###\" class=\"pcbtn-green\" onclick=\"obj_action_listen('"+uid+"', 'listen', '"+tipsid+"');\">+加关注</a>");
+							}
+						}
+						else {
+							alert(error);
+						}
+					}
+
+				}
+			},
+			error: function() {
+
+			}
+		});
+	}
+}
+
+//发表心情
+function obj_public_mood(content_id) {
+	var content = $("#"+content_id).val();
+	//心情内容
+	if (content == '' || content == '记录每一天的心情...') {
+		$.dialog({
+			lock:true,
+			title: '错误提示',
+			content: '请填写心情内容', 
+			icon: 'error',
+			button: [ 
+				{
+					name: '确定'
+				}
+			]
+		});
+		return false;
+	}
+	if (strQuantity(content) > 500) {
+		$.dialog({
+			lock:true,
+			title: '错误提示',
+			content: '心情内容不能大于500个字', 
+			icon: 'error',
+			button: [ 
+				{
+					name: '确定'
+				}
+			]
+		});
+		return false;
+	}
+
+	//发表心情
+	$.ajax({
+		type: "POST",
+		url: _ROOT_PATH + "usercp.php?c=weibo",
+		cache: false,
+		data: {a:"saveweibo", content:content, r:get_rndnum(8)},
+		dataType: "json",
+		success: function(data) {
+			var json = eval(data);
+			var response = json.response;
+			var msg = json.msg;
+			if (response == '1') {
+				var tips = "";
+				if (msg.length > 0) {
+					tips = msg;
+				}
+				else {
+					tips = "发表成功";
+				}
+				$.dialog({
+					lock:true,
+					title: '成功提示',
+					content: tips, 
+					icon: 'succeed',
+					button: [ 
+						{
+							name: '确定',
+							callback: function () {
+								window.top.location.reload();
+							}
+						}
+					]
+				});
+			}
+			else {
+				var tips = "";
+				if (msg.length > 0) {
+					tips = msg;
+				}
+				else {
+					tips = "发表失败";
+				}
+				$.dialog.tips(tips, 3);
+			}
+		},
+		error: function() {
+
+		}
+	});
+
+}
+//心情文本框
+function obj_del_wbcontent(content_id) {
+	var content = $("#"+content_id).val();
+	if (content == '记录每一天的心情...') {
+		$("#"+content_id).val("");
+	}
+}
+function obj_attr_wbcontent(content_id) {
+	var content = $("#"+content_id).val();
+	if (content == '') {
+		$("#title").val("记录每一天的心情...");
+	}
+}
+function obj_cancel_wbcontent(content_id) {
+	var content = $("#"+content_id).val();
+	if (content != '记录每一天的心情...') {
+		$("#"+content_id).val("记录每一天的心情...");
+	}
+}
+</script>
+</head>
+<body>
+<link href="/tpl/user/default/css.css" rel="stylesheet" />
+<div class="nav0">
+<div class="oe_top">
+  <div class="oe_topcon">
+    <div class="left">欢迎来到OElove V5.0免费版演示</div>
+    <div class="right drop">
+      <div class="login">
+                欢迎您：
+                <img src='/data/attachment/upload/201110/22/f2fde8e7d8aa2a10.gif' border='0' class='' />002(ID:164084) <span>普通会员</span>
+                        <a href="/usercp.php">会员中心</a> | <a href="/index.php?c=home&uid=164084">我的主页</a> | <a href="/index.php?c=passport&a=logout">退出登录</a> 
+                      </div>
+      
+      <dl class="cin">
+        <dt><i></i>手机版</dt>
+        <dd class="sub">
+                    <img src="/index.php?c=scan&a=getqr&size=4&url=http%3A%2F%2Fjiaoyou.phpcoo.com%2Fwap.php&r=1535626541" />
+          <p>扫一扫 手机交友</p>
+        </dd>
+      </dl>
+      
+    </div>
+    <div class="clear"></div>
+  </div>
+</div>
+<div class="oe_nav">
+  <div class="oe_navcon">
+    <div class="logo">
+      <a href="/index.php"><img class="logo" src="/data/attachment/upload/201704/26/82b1813f4352fb91.png"  alt="OElove V5.0免费版演示" /></a><img class="line" src="/tpl/templets/default/images/line.png" alt="" />
+      <div class="clear"></div>
+    </div>
+    <div class="menu">
+      <ul>
+        <li><a href="/">首页</a></li>
+                        <li><a href="/index.php?c=user&s_sex=2">会员</a></li>
+                        <li><a href="/index.php?c=party">活动</a></li>
+        <li><a href="/index.php?c=diary">日记</a></li>
+        <li><a href="/usercp.php?c=weibo">微心情</a></li>
+        <li><a href="/index.php?c=case">幸福案例</a></li>
+        <li><a href="/index.php?c=safety">防骗中心</a></li>
+      </ul>
+    </div>
+    <div class="clear"></div>
+  </div>
+</div>
+</div>
+<div style="height:140px;"></div>
+
+
+
+
+
+<div class="user_main">
+  <div class="oe_bn"><span></span><a href="/usercp.php">会员中心</a> &gt;&gt; 我的资料</div>
+  <div class="user_main_left">
+  <div class="oe_index_uL_top">
+    <div class="oe_index_uL_head">
+	  <dl>
+	    <dt>
+                <a href="/usercp.php?c=avatar"><img src="/tpl/static/images/gender_1.gif" title="设置头像" /></a>
+              
+       
+      
+      
+      </dt>
+      <dd>
+        <h2><img src='/data/attachment/upload/201110/22/f2fde8e7d8aa2a10.gif' border='0' class='' />002</h2>
+        <h3><a href="/index.php?c=home&uid=164084" target="_blank">查看我的主页</a></h3>
+      </dd>
+      <div class="clear"></div>
+	  </dl>
+	  <div class="clear"></div>
+
+    </div>
+    <div class="oe_uL_rz">
+      <div class="oe_uL_rz_name">
+	  征友状态：
+	  	  进行中
+	  	  <a href="/usercp.php?c=account&a=setstatus">修改</a>
+	  </div>
+      <div class="oe_uL_rz_con">
+	    <img src="/tpl/user/images/a1_h.png" title="身份证未认证" />
+		<img src="/tpl/user/images/a2_h.png" title="邮箱未认证" />
+		<img src="/tpl/user/images/a3_h.png" title="视频未认证" />
+	   <a href="/usercp.php?c=certify">诚信认证</a>
+	  </div>
+    </div>
+    <div class="oe_index_uL_jb">
+      <ul>
+        <li><span><a href="/usercp.php?c=money">0</a></span>我的金币</li>
+        <li><span><a href="/usercp.php?c=points">10</a></span>我的积分</li>
+        <div class="clear"></div>
+      </ul>
+    </div>
+    <div class="mu_profile">
+      <a href="/usercp.php?c=payment" class="a_1">在线充值</a>
+      <a href="/usercp.php?c=profile" class="a_2">完善资料</a>
+    </div>
+  </div>
+  <div class="oe_hr"></div>
+  <div class="u_menu">
+    <ul>
+      <li> <i class="ico_1"></i><a href="/usercp.php?c=vip">会员服务</a></li>
+
+	  	  
+      <li>
+        <i class="ico_2"></i><a href="/usercp.php?c=message">私信</a> 
+		      </li>
+      <li>
+        <i class="ico_3"></i><a href="/usercp.php?c=gift">礼物</a>
+		      </li>
+
+      <li><i class="ico_4"></i><a href="/usercp.php?c=listen">关注</a></li>
+      <li><i class="ico_5"></i><a href="/usercp.php?c=visitme">谁看过我</a></li>
+      <li><i class="ico_6"></i><a href="/usercp.php?c=weibo">心情微博</a></li>
+      <li><i class="ico_7"></i><a href="/usercp.php?c=diary">日记</a></li>
+      <li><i class="ico_10"></i><a href="/usercp.php?c=myparty">我报名的活动</a></li>
+      <li><i class="ico_8"></i><a href="/usercp.php?c=extend&a=connect">其它</a></li>
+    </ul>
+  </div>
+  
+  <div class="u_photo">
+    <dl>
+      <dt>
+        <a href="/usercp.php?c=album&a=upload"><span></span></a>
+      </dt>
+      <dd>
+        <a href="/usercp.php?c=album&a=upload"><b>上传美照</b><br>获取更多关注</a>
+      </dd>
+      <div class="clear"></div>
+    </dl>
+  </div>
+  </div>
+  <!--//user_main_left End-->
+
+  <div class="main_right">
+	  <div class="oe_tab_nv">
+	    <ul>
+		  <li class="tab_item"><a href="/usercp.php?c=profile">基本资料</a></li>
+		  <li class="tab_item current"><a href="/usercp.php?c=profile&a=more">详细资料</a></li>
+		  <li class="tab_item"><a href="/usercp.php?c=profile&a=monolog">内心独白</a></li>
+		  <li class="tab_item"><a href="/usercp.php?c=profile&a=contact">联系资料</a></li>
+		  	    </ul>
+	  </div>
+	<div class="div_smallnav_content_hover basicdata">
+	  
+	  	  
+	   
+	  <!--详细资料 Begin-->
+	  <form name="myform" id="myform" action="/usercp.php?c=profile&a=savemore" method="post">
+	  <table cellpadding='0' cellspacing='0' border='0' width="98%" class="user-table table-margin lh35">
+		  <tr>
+			<td colspan="4" style="padding-bottom:10px;"><div class="item_title" style="width:100%"><p>工作学习</p><span class="shadow"></span></div></td>
+		  </tr>
+		  <!-- 公司类型、收入 -->
+		  <tr>
+			<td class='lblock' width='15%'>公司类型 <span class='f_red'></span></td>
+			<td class='rblock' width="35%"><select name='companytype' id='companytype'><option value=''>=请选择=</option><option value='1'>政府机关</option><option value='2'>事业单位</option><option value='3'>外企企业</option><option value='4'>世界500强</option><option value='5'>上市公司</option><option value='6'>国有企业</option><option value='7'>私营企业</option><option value='8'>自有公司</option></select> <span id='dcompanytype' class='f_red'></span></td>
+			<td class='lblock' width="15%">收入描述 <span class='f_red'></span></td>
+			<td class='rblock' width="35%"><select name='income' id='income'><option value=''>=请选择=</option><option value='1'>福利优越</option><option value='2'>奖金丰厚</option><option value='3'>事业稳定上升</option><option value='4'>事业刚起步</option><option value='5'>投资高回报</option></select> <span id="dincome"></span></td>
+		  </tr>
+		  <!-- 工作、公司 -->
+		  <tr>
+			<td class='lblock'>工作状况 <span class='f_red'></span></td>
+			<td class='rblock'><select name='workstatus' id='workstatus'><option value=''>=请选择=</option><option value='1'>轻松稳定</option><option value='2'>朝九晚五</option><option value='3'>偶尔加班</option><option value='4'>经常加班</option><option value='5'>偶尔出差</option><option value='6'>经常出差</option><option value='7'>经常有应酬</option><option value='8'>工作时间自由</option></select> <span id="dworkstatus"></span></td>
+			<td class='lblock'>公司名称 <span class='f_red'></span></td>
+			<td class='rblock'><input type="text" name="companyname" id="companyname" value="" class="input-150" /> <span id='dcompanyname' class='f_red'></span></td>
+		  </tr>
+		  <!-- 学历、专业 -->
+		  <tr>
+			<td class='lblock'>学 历 <span class='f_red'>*</span></td>
+			<td class='rblock'>
+			  <select name='education' id='education'><option value=''>=请选择=</option><option value='1'>中专以下</option><option value='2'>中专</option><option value='3'>大专</option><option value='4'>本科</option><option value='5' selected>硕士</option><option value='6'>博士</option><option value='7'>博士后</option></select>
+			  <span id="deducation"></span>
+			</td>
+			<td class='lblock'>专业类型 <span class='f_red'></span></td>
+			<td class='rblock'><select name='specialty' id='specialty'><option value=''>=请选择=</option><option value='1'>计算机类</option><option value='2'>电子信息类</option><option value='3'>中文类</option><option value='4'>外文类</option><option value='5'>经济学类</option><option value='6'>金融学类</option><option value='7'>管理类</option><option value='8'>市场营销类</option><option value='9'>法学类</option><option value='10'>教育类</option><option value='11'>社会学类</option><option value='12'>历史类</option><option value='13'>哲学类</option><option value='14'>艺术类</option><option value='15'>图书馆类</option><option value='16'>情报档案类</option><option value='17'>政治类</option><option value='18'>数学类</option><option value='19'>统计类</option><option value='20'>物理类</option><option value='21'>化学类</option><option value='22'>生物类</option><option value='23'>食品类</option><option value='24'>医学类</option><option value='25'>环境类</option><option value='26'>地理类</option><option value='27'>建筑类</option><option value='28'>测绘类</option><option value='29'>电气类</option><option value='30'>机械类</option><option value='31'>其他类</option></select> <span id='dspecialty' class='f_red'></span></td>
+		  </tr>
+		  <!-- 学校 -->
+		  <tr>
+			<td class='lblock'>毕业学校 <span class='f_red'></span></td>
+			<td class='rblock'><input type='text' name='school' id='school' class='input-150' value="" /> <span id="dschool"></span></td>
+			<td class='lblock'>入学年份 <span class='f_red'></span></td>
+			<td class='rblock'><input type='text' name='schoolyear' id='schoolyear' class='input-s' value="" /> <span id='dschoolyear' class='f_red'></span></td>
+		  </tr>
+		  <!-- 语言能力 -->
+		  <tr>
+			<td class='lblock'>语言能力 <span class='f_red'></span></td>
+			<td class='rblock' colspan="3" id="em_language_edit">
+			<table width='98%' border='0' align='left' cellpadding='0' cellspacing='0'>  <tr> <td class='hback' width='20%'> <input type='checkbox' name='language[]' id='language[]' onclick="check_maxnum('language', this, 5)" value='1' /> 中文(普通话) </td> <td class='hback' width='20%'> <input type='checkbox' name='language[]' id='language[]' onclick="check_maxnum('language', this, 5)" value='2' /> 中文(广东话) </td> <td class='hback' width='20%'> <input type='checkbox' name='language[]' id='language[]' onclick="check_maxnum('language', this, 5)" value='3' /> 英语 </td> <td class='hback' width='20%'> <input type='checkbox' name='language[]' id='language[]' onclick="check_maxnum('language', this, 5)" value='4' /> 法语 </td> <td class='hback' width='20%'> <input type='checkbox' name='language[]' id='language[]' onclick="check_maxnum('language', this, 5)" value='5' /> 日语 </td></tr><tr> <td class='hback' width='20%'> <input type='checkbox' name='language[]' id='language[]' onclick="check_maxnum('language', this, 5)" value='6' /> 韩语 </td> <td class='hback' width='20%'> <input type='checkbox' name='language[]' id='language[]' onclick="check_maxnum('language', this, 5)" value='7' /> 德语 </td> <td class='hback' width='20%'> <input type='checkbox' name='language[]' id='language[]' onclick="check_maxnum('language', this, 5)" value='8' /> 意大利语 </td> <td class='hback' width='20%'> <input type='checkbox' name='language[]' id='language[]' onclick="check_maxnum('language', this, 5)" value='9' /> 俄语 </td> <td class='hback' width='20%'> <input type='checkbox' name='language[]' id='language[]' onclick="check_maxnum('language', this, 5)" value='10' /> 芬兰语 </td></tr><tr> <td class='hback' width='20%'> <input type='checkbox' name='language[]' id='language[]' onclick="check_maxnum('language', this, 5)" value='11' /> 荷兰语 </td> <td class='hback' width='20%'> <input type='checkbox' name='language[]' id='language[]' onclick="check_maxnum('language', this, 5)" value='12' /> 葡萄牙语 </td> <td class='hback' width='20%'> <input type='checkbox' name='language[]' id='language[]' onclick="check_maxnum('language', this, 5)" value='13' /> 西班牙语 </td> <td class='hback' width='20%'> <input type='checkbox' name='language[]' id='language[]' onclick="check_maxnum('language', this, 5)" value='14' /> 越南语 </td> <td class='hback' width='20%'> <input type='checkbox' name='language[]' id='language[]' onclick="check_maxnum('language', this, 5)" value='15' /> 阿拉伯语 </td></tr><tr> <td class='hback' width='20%'> <input type='checkbox' name='language[]' id='language[]' onclick="check_maxnum('language', this, 5)" value='16' /> 泰国语 </td> <td class='hback' width='20%'> <input type='checkbox' name='language[]' id='language[]' onclick="check_maxnum('language', this, 5)" value='17' /> 印度尼西亚语 </td> <td class='hback' width='20%'> <input type='checkbox' name='language[]' id='language[]' onclick="check_maxnum('language', this, 5)" value='18' /> 印度语 </td> <td class='hback' width='20%'> <input type='checkbox' name='language[]' id='language[]' onclick="check_maxnum('language', this, 5)" value='19' /> 丹麦语 </td> <td class='hback' width='20%'> <input type='checkbox' name='language[]' id='language[]' onclick="check_maxnum('language', this, 5)" value='20' /> 希腊语 </td></tr><tr> <td class='hback' width='20%'> <input type='checkbox' name='language[]' id='language[]' onclick="check_maxnum('language', this, 5)" value='21' /> 伊朗语 </td> <td class='hback' width='20%'> <input type='checkbox' name='language[]' id='language[]' onclick="check_maxnum('language', this, 5)" value='22' /> 匈牙利语 </td> <td class='hback' width='20%'> <input type='checkbox' name='language[]' id='language[]' onclick="check_maxnum('language', this, 5)" value='23' /> 土耳其语 </td> <td class='hback' width='20%'> <input type='checkbox' name='language[]' id='language[]' onclick="check_maxnum('language', this, 5)" value='24' /> 挪威语 </td> <td class='hback' width='20%'> <input type='checkbox' name='language[]' id='language[]' onclick="check_maxnum('language', this, 5)" value='25' /> 捷克语 </td></tr><tr> <td class='hback' width='20%'> <input type='checkbox' name='language[]' id='language[]' onclick="check_maxnum('language', this, 5)" value='26' /> 波兰语 </td> <td class='hback' width='20%'> <input type='checkbox' name='language[]' id='language[]' onclick="check_maxnum('language', this, 5)" value='27' /> 瑞典语 </td> <td class='hback' width='20%'> <input type='checkbox' name='language[]' id='language[]' onclick="check_maxnum('language', this, 5)" value='28' /> 缅甸语 </td> <td class='hback' width='20%'> <input type='checkbox' name='language[]' id='language[]' onclick="check_maxnum('language', this, 5)" value='29' /> 罗马尼亚语 </td>  </tr></table>
+			 <span id="dlanguage" class="f_red"></span></td>
+		  </tr>
+
+		  <tr>
+			<td colspan="4" style="padding-top:10px;padding-bottom:10px;"><div class="item_title" style="width:100%"><p>生活描述</p><span class="shadow"></span></div></td>
+		  </tr>
+		  <!-- 排行、消费 -->
+		  <tr>
+			<td class='lblock'>家中排行 <span class='f_red'></span></td>
+			<td class='rblock'><select name='tophome' id='tophome'><option value=''>=请选择=</option><option value='1'>独生子女</option><option value='2'>老大</option><option value='3'>老二</option><option value='4'>老三</option><option value='5'>老四</option><option value='6'>老五及更小</option><option value='7'>老幺</option></select> <span id='dtophome' class='f_red'></span></td>
+			<td class='lblock'>最大消费 <span class='f_red'></span></td>
+			<td class='rblock'><select name='consume' id='consume'><option value=''>=请选择=</option><option value='1'>美食</option><option value='2'>服装</option><option value='3'>娱乐</option><option value='4'>出行</option><option value='5'>交友</option><option value='6'>文化</option><option value='7'>教育</option><option value='8'>其他</option></select> <span id="dconsume"></span></td>
+		  </tr>
+		  <!-- 吸烟、喝酒 -->
+		  <tr>
+			<td class='lblock'>是否吸烟  <span class='f_red'></span></td>
+			<td class='rblock'><select name='smoking' id='smoking'><option value=''>=请选择=</option><option value='1'>吸，很反感吸烟</option><option value='2'>不吸，但不反感</option><option value='3'>社交时偶尔吸</option><option value='4'>每周吸几次</option><option value='5'>每天都吸</option><option value='6'>有烟瘾</option></select> <span id="dsmoking"></span></td>
+			<td class='lblock'>是否喝酒 <span class='f_red'></span></td>
+			<td class='rblock'><select name='drinking' id='drinking'><option value=''>=请选择=</option><option value='1'>不喝</option><option value='2'>社交需要时喝</option><option value='3'>有兴致时喝</option><option value='4'>每天都离不开酒</option></select> <span id='ddrinking' class='f_red'></span></td>
+		  </tr>
+		  <!-- 信仰、锻炼 -->
+		  <tr>
+			<td class='lblock'>宗教信仰 <span class='f_red'></span></td>
+			<td class='rblock'><select name='faith' id='faith'><option value=''>=请选择=</option><option value='1'>无宗教信仰</option><option value='2'>大乘佛教显宗</option><option value='3'>大乘佛教密宗</option><option value='4'>小乘佛教</option><option value='5'>道教</option><option value='6'>儒教</option><option value='7'>基督教天主教派</option><option value='8'>基督教东正教派</option><option value='9'>基督教新教派</option><option value='10'>犹太教</option><option value='11'>伊斯兰教什叶派</option><option value='12'>伊斯兰教逊尼派</option><option value='13'>印度教</option><option value='14'>神道教</option><option value='15'>萨满教</option><option value='16'>其他宗教信仰</option></select> <span id="dfaith"></span></td>
+			<td class='lblock'>锻炼习惯 <span class='f_red'></span></td>
+			<td class='rblock'><select name='workout' id='workout'><option value=''>=请选择=</option><option value='1'>每天锻炼</option><option value='2'>每周至少一次</option><option value='3'>每月几次</option><option value='4'>没时间锻炼</option><option value='5'>集中时间锻炼</option><option value='6'>不喜欢锻炼</option></select> <span id='dworkout' class='f_red'></span></td>
+		  </tr>
+		  <!-- 习惯、孩子 -->
+		  <tr>
+			<td class='lblock'>作息习惯 <span class='f_red'></span></td>
+			<td class='rblock'><select name='rest' id='rest'><option value=''>=请选择=</option><option value='1'>早睡早起很规律</option><option value='2'>经常夜猫子</option><option value='3'>总是早起鸟</option><option value='4'>偶尔懒散一下</option><option value='5'>没有规律</option></select> <span id="drest"></span></td>
+			<td class='lblock'>是否要孩子 <span class='f_red'></span></td>
+			<td class='rblock'><select name='havechildren' id='havechildren'><option value=''>=请选择=</option><option value='1'>愿意</option><option value='2'>不愿意</option><option value='3'>视情况而定</option></select> <span id='dhavechildren' class='f_red'></span></td>
+		  </tr>
+		  <!-- 同住、浪漫 -->
+		  <tr>
+			<td class='lblock'>与对方父母同住 <span class='f_red'></span></td>
+			<td class='rblock'><select name='talive' id='talive'><option value=''>=请选择=</option><option value='1'>愿意</option><option value='2'>不愿意</option><option value='3'>视情况而定</option></select> <span id="dtalive"></span></td>
+			<td class='lblock'>喜欢制造浪漫 <span class='f_red'></span></td>
+			<td class='rblock'><select name='romantic' id='romantic'><option value=''>=请选择=</option><option value='1'>经常</option><option value='2'>偶尔</option><option value='3'>视情况而定</option><option value='4'>从不</option><option value='5'>不喜欢</option></select> <span id="dromantic"></span></td>
+		  </tr>
+		  <!-- 生活技能 -->
+		  <tr>
+			<td class='lblock'>生活技能 <span class='f_red'></span></td>
+			<td class='rblock' colspan="3" id="em_lifeskill_edit">
+			<table width='98%' border='0' align='left' cellpadding='0' cellspacing='0'>  <tr> <td class='hback' width='20%'> <input type='checkbox' name='lifeskill[]' id='lifeskill[]' onclick="check_maxnum('lifeskill', this, 5)" value='1' /> 现实个人目标 </td> <td class='hback' width='20%'> <input type='checkbox' name='lifeskill[]' id='lifeskill[]' onclick="check_maxnum('lifeskill', this, 5)" value='2' /> 维护朋友圈关系 </td> <td class='hback' width='20%'> <input type='checkbox' name='lifeskill[]' id='lifeskill[]' onclick="check_maxnum('lifeskill', this, 5)" value='3' /> 装修房屋 </td> <td class='hback' width='20%'> <input type='checkbox' name='lifeskill[]' id='lifeskill[]' onclick="check_maxnum('lifeskill', this, 5)" value='4' /> 志愿者/义工 </td> <td class='hback' width='20%'> <input type='checkbox' name='lifeskill[]' id='lifeskill[]' onclick="check_maxnum('lifeskill', this, 5)" value='5' /> 热衷电脑 </td></tr><tr> <td class='hback' width='20%'> <input type='checkbox' name='lifeskill[]' id='lifeskill[]' onclick="check_maxnum('lifeskill', this, 5)" value='6' /> 保持生活条律 </td> <td class='hback' width='20%'> <input type='checkbox' name='lifeskill[]' id='lifeskill[]' onclick="check_maxnum('lifeskill', this, 5)" value='7' /> 理财 </td> <td class='hback' width='20%'> <input type='checkbox' name='lifeskill[]' id='lifeskill[]' onclick="check_maxnum('lifeskill', this, 5)" value='8' /> 在家款待朋友 </td> <td class='hback' width='20%'> <input type='checkbox' name='lifeskill[]' id='lifeskill[]' onclick="check_maxnum('lifeskill', this, 5)" value='9' /> 抚养或照顾孩子 </td> <td class='hback' width='20%'> <input type='checkbox' name='lifeskill[]' id='lifeskill[]' onclick="check_maxnum('lifeskill', this, 5)" value='10' /> 制造浪漫 </td></tr><tr> <td class='hback' width='20%'> <input type='checkbox' name='lifeskill[]' id='lifeskill[]' onclick="check_maxnum('lifeskill', this, 5)" value='11' /> 社交活动 </td> <td class='hback' width='20%'> <input type='checkbox' name='lifeskill[]' id='lifeskill[]' onclick="check_maxnum('lifeskill', this, 5)" value='12' /> 谈生意 </td> <td class='hback' width='20%'> <input type='checkbox' name='lifeskill[]' id='lifeskill[]' onclick="check_maxnum('lifeskill', this, 5)" value='13' /> 保持健康 </td> <td class='hback' width='20%'> <input type='checkbox' name='lifeskill[]' id='lifeskill[]' onclick="check_maxnum('lifeskill', this, 5)" value='14' /> 解决冲突 </td> <td class='hback' width='20%'> <input type='checkbox' name='lifeskill[]' id='lifeskill[]' onclick="check_maxnum('lifeskill', this, 5)" value='15' /> 博闻强识 </td></tr><tr> <td class='hback' width='20%'> <input type='checkbox' name='lifeskill[]' id='lifeskill[]' onclick="check_maxnum('lifeskill', this, 5)" value='16' /> 对自我长期规划 </td> <td class='hback' width='20%'> <input type='checkbox' name='lifeskill[]' id='lifeskill[]' onclick="check_maxnum('lifeskill', this, 5)" value='17' /> 在简单中寻求快乐与满足 </td> <td class='hback' width='20%'> <input type='checkbox' name='lifeskill[]' id='lifeskill[]' onclick="check_maxnum('lifeskill', this, 5)" value='18' /> 文化和艺术 </td> <td class='hback' width='20%'> <input type='checkbox' name='lifeskill[]' id='lifeskill[]' onclick="check_maxnum('lifeskill', this, 5)" value='19' /> 结交新朋友 </td> <td class='hback' width='20%'> <input type='checkbox' name='lifeskill[]' id='lifeskill[]' onclick="check_maxnum('lifeskill', this, 5)" value='20' /> 烹饪 </td></tr><tr> <td class='hback' width='20%'> <input type='checkbox' name='lifeskill[]' id='lifeskill[]' onclick="check_maxnum('lifeskill', this, 5)" value='21' /> 赚钱养家 </td> <td class='hback' width='20%'> <input type='checkbox' name='lifeskill[]' id='lifeskill[]' onclick="check_maxnum('lifeskill', this, 5)" value='22' /> 保养、修理汽车 </td> <td class='hback' width='20%'> <input type='checkbox' name='lifeskill[]' id='lifeskill[]' onclick="check_maxnum('lifeskill', this, 5)" value='23' /> 做别人的好朋友和好同事 </td> <td class='hback' width='20%'> <input type='checkbox' name='lifeskill[]' id='lifeskill[]' onclick="check_maxnum('lifeskill', this, 5)" value='24' /> 其他 </td>  </tr></table>
+			<span id='dlifeskill' class='f_red'></span></td>
+		  </tr>
+		  <tr>
+			<td colspan="4" style="padding-top:10px;padding-bottom:10px;"><div class="item_title" style="width:100%"><p>兴趣爱好</p><span class="shadow"></span></div></td>
+		  </tr>
+		  <!-- 喜欢的运动 -->
+		  <tr>
+			<td class='lblock'>喜欢的运动 <span class='f_red'></span></td>
+			<td class='rblock' id="em_sports_edit" colspan="3">
+			<table width='98%' border='0' align='left' cellpadding='0' cellspacing='0'>  <tr> <td class='hback' width='20%'> <input type='checkbox' name='sports[]' id='sports[]' onclick="check_maxnum('sports', this, 5)" value='1' /> 足球 </td> <td class='hback' width='20%'> <input type='checkbox' name='sports[]' id='sports[]' onclick="check_maxnum('sports', this, 5)" value='2' /> 篮球 </td> <td class='hback' width='20%'> <input type='checkbox' name='sports[]' id='sports[]' onclick="check_maxnum('sports', this, 5)" value='3' /> 排球 </td> <td class='hback' width='20%'> <input type='checkbox' name='sports[]' id='sports[]' onclick="check_maxnum('sports', this, 5)" value='4' /> 网球 </td> <td class='hback' width='20%'> <input type='checkbox' name='sports[]' id='sports[]' onclick="check_maxnum('sports', this, 5)" value='5' /> 羽毛球 </td></tr><tr> <td class='hback' width='20%'> <input type='checkbox' name='sports[]' id='sports[]' onclick="check_maxnum('sports', this, 5)" value='6' /> 乒乓球 </td> <td class='hback' width='20%'> <input type='checkbox' name='sports[]' id='sports[]' onclick="check_maxnum('sports', this, 5)" value='7' /> 壁球 </td> <td class='hback' width='20%'> <input type='checkbox' name='sports[]' id='sports[]' onclick="check_maxnum('sports', this, 5)" value='8' /> 保龄球 </td> <td class='hback' width='20%'> <input type='checkbox' name='sports[]' id='sports[]' onclick="check_maxnum('sports', this, 5)" value='9' /> 手球 </td> <td class='hback' width='20%'> <input type='checkbox' name='sports[]' id='sports[]' onclick="check_maxnum('sports', this, 5)" value='10' /> 橄榄球 </td></tr><tr> <td class='hback' width='20%'> <input type='checkbox' name='sports[]' id='sports[]' onclick="check_maxnum('sports', this, 5)" value='11' /> 棒球 </td> <td class='hback' width='20%'> <input type='checkbox' name='sports[]' id='sports[]' onclick="check_maxnum('sports', this, 5)" value='12' /> 高尔夫 </td> <td class='hback' width='20%'> <input type='checkbox' name='sports[]' id='sports[]' onclick="check_maxnum('sports', this, 5)" value='13' /> 健身 </td> <td class='hback' width='20%'> <input type='checkbox' name='sports[]' id='sports[]' onclick="check_maxnum('sports', this, 5)" value='14' /> 跑步 </td> <td class='hback' width='20%'> <input type='checkbox' name='sports[]' id='sports[]' onclick="check_maxnum('sports', this, 5)" value='15' /> 自行车 </td></tr><tr> <td class='hback' width='20%'> <input type='checkbox' name='sports[]' id='sports[]' onclick="check_maxnum('sports', this, 5)" value='16' /> 摩托车 </td> <td class='hback' width='20%'> <input type='checkbox' name='sports[]' id='sports[]' onclick="check_maxnum('sports', this, 5)" value='17' /> 汽车 </td> <td class='hback' width='20%'> <input type='checkbox' name='sports[]' id='sports[]' onclick="check_maxnum('sports', this, 5)" value='18' /> 舞蹈 </td> <td class='hback' width='20%'> <input type='checkbox' name='sports[]' id='sports[]' onclick="check_maxnum('sports', this, 5)" value='19' /> 体操 </td> <td class='hback' width='20%'> <input type='checkbox' name='sports[]' id='sports[]' onclick="check_maxnum('sports', this, 5)" value='20' /> 跆拳道 </td></tr><tr> <td class='hback' width='20%'> <input type='checkbox' name='sports[]' id='sports[]' onclick="check_maxnum('sports', this, 5)" value='21' /> 柔道 </td> <td class='hback' width='20%'> <input type='checkbox' name='sports[]' id='sports[]' onclick="check_maxnum('sports', this, 5)" value='22' /> 空手道 </td> <td class='hback' width='20%'> <input type='checkbox' name='sports[]' id='sports[]' onclick="check_maxnum('sports', this, 5)" value='23' /> 游泳 </td> <td class='hback' width='20%'> <input type='checkbox' name='sports[]' id='sports[]' onclick="check_maxnum('sports', this, 5)" value='24' /> 潜水 </td> <td class='hback' width='20%'> <input type='checkbox' name='sports[]' id='sports[]' onclick="check_maxnum('sports', this, 5)" value='25' /> 水上运动 </td></tr><tr> <td class='hback' width='20%'> <input type='checkbox' name='sports[]' id='sports[]' onclick="check_maxnum('sports', this, 5)" value='26' /> 航海 </td> <td class='hback' width='20%'> <input type='checkbox' name='sports[]' id='sports[]' onclick="check_maxnum('sports', this, 5)" value='27' /> 滑雪/滑冰 </td> <td class='hback' width='20%'> <input type='checkbox' name='sports[]' id='sports[]' onclick="check_maxnum('sports', this, 5)" value='28' /> 拳击 </td> <td class='hback' width='20%'> <input type='checkbox' name='sports[]' id='sports[]' onclick="check_maxnum('sports', this, 5)" value='29' /> 钓鱼 </td> <td class='hback' width='20%'> <input type='checkbox' name='sports[]' id='sports[]' onclick="check_maxnum('sports', this, 5)" value='30' /> 瑜伽 </td></tr><tr> <td class='hback' width='20%'> <input type='checkbox' name='sports[]' id='sports[]' onclick="check_maxnum('sports', this, 5)" value='31' /> 武术 </td> <td class='hback' width='20%'> <input type='checkbox' name='sports[]' id='sports[]' onclick="check_maxnum('sports', this, 5)" value='32' /> 其它 </td> <td class='hback' width='20%'> <input type='checkbox' name='sports[]' id='sports[]' onclick="check_maxnum('sports', this, 5)" value='33' /> 不喜欢运动 </td>  </tr></table>
+			 <span id='dsports' class='f_red'></span></td>
+		  </tr>
+		  <!-- 喜欢的食物 -->
+		  <tr>
+			<td class='lblock'>喜欢的食物 <span class='f_red'></span></td>
+			<td class='rblock' id="em_food_edit" colspan="3">
+			<table width='98%' border='0' align='left' cellpadding='0' cellspacing='0'>  <tr> <td class='hback' width='20%'> <input type='checkbox' name='food[]' id='food[]' onclick="check_maxnum('food', this, 5)" value='1' /> 中国菜 </td> <td class='hback' width='20%'> <input type='checkbox' name='food[]' id='food[]' onclick="check_maxnum('food', this, 5)" value='2' /> 印度菜 </td> <td class='hback' width='20%'> <input type='checkbox' name='food[]' id='food[]' onclick="check_maxnum('food', this, 5)" value='3' /> 泰国菜 </td> <td class='hback' width='20%'> <input type='checkbox' name='food[]' id='food[]' onclick="check_maxnum('food', this, 5)" value='4' /> 法国菜 </td> <td class='hback' width='20%'> <input type='checkbox' name='food[]' id='food[]' onclick="check_maxnum('food', this, 5)" value='5' /> 意大利菜 </td></tr><tr> <td class='hback' width='20%'> <input type='checkbox' name='food[]' id='food[]' onclick="check_maxnum('food', this, 5)" value='6' /> 俄罗斯菜 </td> <td class='hback' width='20%'> <input type='checkbox' name='food[]' id='food[]' onclick="check_maxnum('food', this, 5)" value='7' /> 日本菜 </td> <td class='hback' width='20%'> <input type='checkbox' name='food[]' id='food[]' onclick="check_maxnum('food', this, 5)" value='8' /> 烧烤 </td> <td class='hback' width='20%'> <input type='checkbox' name='food[]' id='food[]' onclick="check_maxnum('food', this, 5)" value='9' /> 健康食品 </td> <td class='hback' width='20%'> <input type='checkbox' name='food[]' id='food[]' onclick="check_maxnum('food', this, 5)" value='10' /> 素食 </td></tr><tr> <td class='hback' width='20%'> <input type='checkbox' name='food[]' id='food[]' onclick="check_maxnum('food', this, 5)" value='11' /> 快餐 </td> <td class='hback' width='20%'> <input type='checkbox' name='food[]' id='food[]' onclick="check_maxnum('food', this, 5)" value='12' /> 巧克力和甜品 </td> <td class='hback' width='20%'> <input type='checkbox' name='food[]' id='food[]' onclick="check_maxnum('food', this, 5)" value='13' /> 其他 </td> <td class='hback' width='20%'> <input type='checkbox' name='food[]' id='food[]' onclick="check_maxnum('food', this, 5)" value='14' /> 无特别爱好 </td>  </tr></table>
+			 <span id='dfood' class='f_red'></span></td>
+		  </tr>
+		  <!-- 喜欢的书籍 -->
+		  <tr>
+			<td class='lblock'>喜欢的书籍 <span class='f_red'></span></td>
+			<td class='rblock' id="em_book_edit" colspan="3">
+			<table width='98%' border='0' align='left' cellpadding='0' cellspacing='0'>  <tr> <td class='hback' width='20%'> <input type='checkbox' name='book[]' id='book[]' onclick="check_maxnum('book', this, 5)" value='1' /> 校园青春 </td> <td class='hback' width='20%'> <input type='checkbox' name='book[]' id='book[]' onclick="check_maxnum('book', this, 5)" value='2' /> 文学 </td> <td class='hback' width='20%'> <input type='checkbox' name='book[]' id='book[]' onclick="check_maxnum('book', this, 5)" value='3' /> 艺术与摄影 </td> <td class='hback' width='20%'> <input type='checkbox' name='book[]' id='book[]' onclick="check_maxnum('book', this, 5)" value='4' /> 励志与成功 </td> <td class='hback' width='20%'> <input type='checkbox' name='book[]' id='book[]' onclick="check_maxnum('book', this, 5)" value='5' /> 动漫与幽默 </td></tr><tr> <td class='hback' width='20%'> <input type='checkbox' name='book[]' id='book[]' onclick="check_maxnum('book', this, 5)" value='6' /> 政治与军事 </td> <td class='hback' width='20%'> <input type='checkbox' name='book[]' id='book[]' onclick="check_maxnum('book', this, 5)" value='7' /> 哲学与宗教 </td> <td class='hback' width='20%'> <input type='checkbox' name='book[]' id='book[]' onclick="check_maxnum('book', this, 5)" value='8' /> 历史传记 </td> <td class='hback' width='20%'> <input type='checkbox' name='book[]' id='book[]' onclick="check_maxnum('book', this, 5)" value='9' /> 运动健身 </td> <td class='hback' width='20%'> <input type='checkbox' name='book[]' id='book[]' onclick="check_maxnum('book', this, 5)" value='10' /> 健康与养生 </td></tr><tr> <td class='hback' width='20%'> <input type='checkbox' name='book[]' id='book[]' onclick="check_maxnum('book', this, 5)" value='11' /> 烹饪与饮食 </td> <td class='hback' width='20%'> <input type='checkbox' name='book[]' id='book[]' onclick="check_maxnum('book', this, 5)" value='12' /> 旅游 </td> <td class='hback' width='20%'> <input type='checkbox' name='book[]' id='book[]' onclick="check_maxnum('book', this, 5)" value='13' /> 投资理财 </td> <td class='hback' width='20%'> <input type='checkbox' name='book[]' id='book[]' onclick="check_maxnum('book', this, 5)" value='14' /> 婚恋与家庭 </td> <td class='hback' width='20%'> <input type='checkbox' name='book[]' id='book[]' onclick="check_maxnum('book', this, 5)" value='15' /> 期刊杂志 </td></tr><tr> <td class='hback' width='20%'> <input type='checkbox' name='book[]' id='book[]' onclick="check_maxnum('book', this, 5)" value='16' /> 娱乐时尚 </td> <td class='hback' width='20%'> <input type='checkbox' name='book[]' id='book[]' onclick="check_maxnum('book', this, 5)" value='17' /> 人文社科 </td> <td class='hback' width='20%'> <input type='checkbox' name='book[]' id='book[]' onclick="check_maxnum('book', this, 5)" value='18' /> 自然科学 </td> <td class='hback' width='20%'> <input type='checkbox' name='book[]' id='book[]' onclick="check_maxnum('book', this, 5)" value='19' /> 收藏与鉴赏 </td> <td class='hback' width='20%'> <input type='checkbox' name='book[]' id='book[]' onclick="check_maxnum('book', this, 5)" value='20' /> 其他 </td></tr><tr> <td class='hback' width='20%'> <input type='checkbox' name='book[]' id='book[]' onclick="check_maxnum('book', this, 5)" value='21' /> 什么都看 </td>  </tr></table>
+			 <span id='dbook' class='f_red'></span></td>
+		  </tr>
+		  <!-- 喜欢的电影 -->
+		  <tr>
+			<td class='lblock'>喜欢的电影 <span class='f_red'></span></td>
+			<td class='rblock' id="em_film_edit" colspan="3">
+			<table width='98%' border='0' align='left' cellpadding='0' cellspacing='0'>  <tr> <td class='hback' width='20%'> <input type='checkbox' name='film[]' id='film[]' onclick="check_maxnum('film', this, 5)" value='1' /> 爱情 </td> <td class='hback' width='20%'> <input type='checkbox' name='film[]' id='film[]' onclick="check_maxnum('film', this, 5)" value='2' /> 喜剧 </td> <td class='hback' width='20%'> <input type='checkbox' name='film[]' id='film[]' onclick="check_maxnum('film', this, 5)" value='3' /> 动作冒险 </td> <td class='hback' width='20%'> <input type='checkbox' name='film[]' id='film[]' onclick="check_maxnum('film', this, 5)" value='4' /> 古装武侠 </td> <td class='hback' width='20%'> <input type='checkbox' name='film[]' id='film[]' onclick="check_maxnum('film', this, 5)" value='5' /> 科幻魔幻 </td></tr><tr> <td class='hback' width='20%'> <input type='checkbox' name='film[]' id='film[]' onclick="check_maxnum('film', this, 5)" value='6' /> 悬疑推理 </td> <td class='hback' width='20%'> <input type='checkbox' name='film[]' id='film[]' onclick="check_maxnum('film', this, 5)" value='7' /> 惊悚恐怖 </td> <td class='hback' width='20%'> <input type='checkbox' name='film[]' id='film[]' onclick="check_maxnum('film', this, 5)" value='8' /> 动画 </td> <td class='hback' width='20%'> <input type='checkbox' name='film[]' id='film[]' onclick="check_maxnum('film', this, 5)" value='9' /> 战争 </td> <td class='hback' width='20%'> <input type='checkbox' name='film[]' id='film[]' onclick="check_maxnum('film', this, 5)" value='10' /> 音乐歌舞 </td></tr><tr> <td class='hback' width='20%'> <input type='checkbox' name='film[]' id='film[]' onclick="check_maxnum('film', this, 5)" value='11' /> 纪录片 </td> <td class='hback' width='20%'> <input type='checkbox' name='film[]' id='film[]' onclick="check_maxnum('film', this, 5)" value='12' /> 剧情 </td> <td class='hback' width='20%'> <input type='checkbox' name='film[]' id='film[]' onclick="check_maxnum('film', this, 5)" value='13' /> 西部 </td> <td class='hback' width='20%'> <input type='checkbox' name='film[]' id='film[]' onclick="check_maxnum('film', this, 5)" value='14' /> 历史传记 </td> <td class='hback' width='20%'> <input type='checkbox' name='film[]' id='film[]' onclick="check_maxnum('film', this, 5)" value='15' /> 其他 </td></tr><tr> <td class='hback' width='20%'> <input type='checkbox' name='film[]' id='film[]' onclick="check_maxnum('film', this, 5)" value='16' /> 什么都看 </td>  </tr></table>
+			<span id='dfilm' class='f_red'></span></td>
+		  </tr>
+		  <!-- 业余爱好 -->
+		  <tr>
+			<td class='lblock'>业余爱好 <span class='f_red'></span></td>
+			<td class='rblock' id="em_interest_edit" colspan="3">
+			<table width='98%' border='0' align='left' cellpadding='0' cellspacing='0'>  <tr> <td class='hback' width='20%'> <input type='checkbox' name='interest[]' id='interest[]' onclick="check_maxnum('interest', this, 5)" value='1' /> 网络 </td> <td class='hback' width='20%'> <input type='checkbox' name='interest[]' id='interest[]' onclick="check_maxnum('interest', this, 5)" value='2' /> 汽车 </td> <td class='hback' width='20%'> <input type='checkbox' name='interest[]' id='interest[]' onclick="check_maxnum('interest', this, 5)" value='3' /> 动物 </td> <td class='hback' width='20%'> <input type='checkbox' name='interest[]' id='interest[]' onclick="check_maxnum('interest', this, 5)" value='4' /> 摄影 </td> <td class='hback' width='20%'> <input type='checkbox' name='interest[]' id='interest[]' onclick="check_maxnum('interest', this, 5)" value='5' /> 影视 </td></tr><tr> <td class='hback' width='20%'> <input type='checkbox' name='interest[]' id='interest[]' onclick="check_maxnum('interest', this, 5)" value='6' /> 音乐 </td> <td class='hback' width='20%'> <input type='checkbox' name='interest[]' id='interest[]' onclick="check_maxnum('interest', this, 5)" value='7' /> 写作 </td> <td class='hback' width='20%'> <input type='checkbox' name='interest[]' id='interest[]' onclick="check_maxnum('interest', this, 5)" value='8' /> 购物 </td> <td class='hback' width='20%'> <input type='checkbox' name='interest[]' id='interest[]' onclick="check_maxnum('interest', this, 5)" value='9' /> 手工艺 </td> <td class='hback' width='20%'> <input type='checkbox' name='interest[]' id='interest[]' onclick="check_maxnum('interest', this, 5)" value='10' /> 园艺 </td></tr><tr> <td class='hback' width='20%'> <input type='checkbox' name='interest[]' id='interest[]' onclick="check_maxnum('interest', this, 5)" value='11' /> 舞蹈 </td> <td class='hback' width='20%'> <input type='checkbox' name='interest[]' id='interest[]' onclick="check_maxnum('interest', this, 5)" value='12' /> 展览 </td> <td class='hback' width='20%'> <input type='checkbox' name='interest[]' id='interest[]' onclick="check_maxnum('interest', this, 5)" value='13' /> 烹饪 </td> <td class='hback' width='20%'> <input type='checkbox' name='interest[]' id='interest[]' onclick="check_maxnum('interest', this, 5)" value='14' /> 读书 </td> <td class='hback' width='20%'> <input type='checkbox' name='interest[]' id='interest[]' onclick="check_maxnum('interest', this, 5)" value='15' /> 绘画 </td></tr><tr> <td class='hback' width='20%'> <input type='checkbox' name='interest[]' id='interest[]' onclick="check_maxnum('interest', this, 5)" value='16' /> 计算机 </td> <td class='hback' width='20%'> <input type='checkbox' name='interest[]' id='interest[]' onclick="check_maxnum('interest', this, 5)" value='17' /> 体育运动 </td> <td class='hback' width='20%'> <input type='checkbox' name='interest[]' id='interest[]' onclick="check_maxnum('interest', this, 5)" value='18' /> 旅游 </td> <td class='hback' width='20%'> <input type='checkbox' name='interest[]' id='interest[]' onclick="check_maxnum('interest', this, 5)" value='19' /> 电子游戏 </td> <td class='hback' width='20%'> <input type='checkbox' name='interest[]' id='interest[]' onclick="check_maxnum('interest', this, 5)" value='20' /> 其它 </td></tr><tr>  </tr></table>
+			 <span id='dinterest' class='f_red'></span></td>
+		  </tr>
+		  <!-- 喜欢的旅游 -->
+		  <tr>
+			<td class='lblock'>喜欢的旅游 <span class='f_red'></span></td>
+			<td class='rblock' id="em_travel_edit"  colspan="3">
+			<table width='98%' border='0' align='left' cellpadding='0' cellspacing='0'>  <tr> <td class='hback' width='20%'> <input type='checkbox' name='travel[]' id='travel[]' onclick="check_maxnum('travel', this, 5)" value='1' /> 惬意海岛 </td> <td class='hback' width='20%'> <input type='checkbox' name='travel[]' id='travel[]' onclick="check_maxnum('travel', this, 5)" value='2' /> 名山古刹 </td> <td class='hback' width='20%'> <input type='checkbox' name='travel[]' id='travel[]' onclick="check_maxnum('travel', this, 5)" value='3' /> 繁华都市 </td> <td class='hback' width='20%'> <input type='checkbox' name='travel[]' id='travel[]' onclick="check_maxnum('travel', this, 5)" value='4' /> 风情名城 </td> <td class='hback' width='20%'> <input type='checkbox' name='travel[]' id='travel[]' onclick="check_maxnum('travel', this, 5)" value='5' /> 广袤森林 </td></tr><tr> <td class='hback' width='20%'> <input type='checkbox' name='travel[]' id='travel[]' onclick="check_maxnum('travel', this, 5)" value='6' /> 高原雪域 </td> <td class='hback' width='20%'> <input type='checkbox' name='travel[]' id='travel[]' onclick="check_maxnum('travel', this, 5)" value='7' /> 秀美山水 </td> <td class='hback' width='20%'> <input type='checkbox' name='travel[]' id='travel[]' onclick="check_maxnum('travel', this, 5)" value='8' /> 历史遗迹 </td> <td class='hback' width='20%'> <input type='checkbox' name='travel[]' id='travel[]' onclick="check_maxnum('travel', this, 5)" value='9' /> 江河大川 </td> <td class='hback' width='20%'> <input type='checkbox' name='travel[]' id='travel[]' onclick="check_maxnum('travel', this, 5)" value='10' /> 峻秀峡谷 </td></tr><tr> <td class='hback' width='20%'> <input type='checkbox' name='travel[]' id='travel[]' onclick="check_maxnum('travel', this, 5)" value='11' /> 小桥流水人家 </td> <td class='hback' width='20%'> <input type='checkbox' name='travel[]' id='travel[]' onclick="check_maxnum('travel', this, 5)" value='12' /> 其他选择 </td> <td class='hback' width='20%'> <input type='checkbox' name='travel[]' id='travel[]' onclick="check_maxnum('travel', this, 5)" value='13' /> 还没想好 </td>  </tr></table>
+			<span id='dtravel' class='f_red'></span></td>
+		  </tr>
+		  <!-- 关注的节目 -->
+		  <tr>
+			<td class='lblock'>关注的节目 <span class='f_red'></span></td>
+			<td class='rblock' id="em_attention_edit" colspan="3">
+			<table width='98%' border='0' align='left' cellpadding='0' cellspacing='0'>  <tr> <td class='hback' width='20%'> <input type='checkbox' name='attention[]' id='attention[]' onclick="check_maxnum('attention', this, 5)" value='1' /> 政治事件 </td> <td class='hback' width='20%'> <input type='checkbox' name='attention[]' id='attention[]' onclick="check_maxnum('attention', this, 5)" value='2' /> 娱乐八卦 </td> <td class='hback' width='20%'> <input type='checkbox' name='attention[]' id='attention[]' onclick="check_maxnum('attention', this, 5)" value='3' /> 体育赛事 </td> <td class='hback' width='20%'> <input type='checkbox' name='attention[]' id='attention[]' onclick="check_maxnum('attention', this, 5)" value='4' /> 理财投资 </td> <td class='hback' width='20%'> <input type='checkbox' name='attention[]' id='attention[]' onclick="check_maxnum('attention', this, 5)" value='5' /> 相声曲艺 </td></tr><tr> <td class='hback' width='20%'> <input type='checkbox' name='attention[]' id='attention[]' onclick="check_maxnum('attention', this, 5)" value='6' /> 海选活动 </td> <td class='hback' width='20%'> <input type='checkbox' name='attention[]' id='attention[]' onclick="check_maxnum('attention', this, 5)" value='7' /> 畅销书 </td> <td class='hback' width='20%'> <input type='checkbox' name='attention[]' id='attention[]' onclick="check_maxnum('attention', this, 5)" value='8' /> 影视热片 </td> <td class='hback' width='20%'> <input type='checkbox' name='attention[]' id='attention[]' onclick="check_maxnum('attention', this, 5)" value='9' /> 休闲生活 </td> <td class='hback' width='20%'> <input type='checkbox' name='attention[]' id='attention[]' onclick="check_maxnum('attention', this, 5)" value='10' /> 行业发展 </td></tr><tr> <td class='hback' width='20%'> <input type='checkbox' name='attention[]' id='attention[]' onclick="check_maxnum('attention', this, 5)" value='11' /> 其他 </td> <td class='hback' width='20%'> <input type='checkbox' name='attention[]' id='attention[]' onclick="check_maxnum('attention', this, 5)" value='12' /> 暂无 </td>  </tr></table>
+			<span id='dattention' class='f_red'></span></td>
+		  </tr>
+		  <!-- 娱乐休闲 -->
+		  <tr>
+			<td class='lblock'>娱乐休闲 <span class='f_red'></span></td>
+			<td class='rblock' id="em_leisure_edit"  colspan="3">
+			<table width='98%' border='0' align='left' cellpadding='0' cellspacing='0'>  <tr> <td class='hback' width='20%'> <input type='checkbox' name='leisure[]' id='leisure[]' onclick="check_maxnum('leisure', this, 5)" value='1' /> 饭店 </td> <td class='hback' width='20%'> <input type='checkbox' name='leisure[]' id='leisure[]' onclick="check_maxnum('leisure', this, 5)" value='2' /> 商场 </td> <td class='hback' width='20%'> <input type='checkbox' name='leisure[]' id='leisure[]' onclick="check_maxnum('leisure', this, 5)" value='3' /> 剧院 </td> <td class='hback' width='20%'> <input type='checkbox' name='leisure[]' id='leisure[]' onclick="check_maxnum('leisure', this, 5)" value='4' /> 酒吧 </td> <td class='hback' width='20%'> <input type='checkbox' name='leisure[]' id='leisure[]' onclick="check_maxnum('leisure', this, 5)" value='5' /> 电影院 </td></tr><tr> <td class='hback' width='20%'> <input type='checkbox' name='leisure[]' id='leisure[]' onclick="check_maxnum('leisure', this, 5)" value='6' /> 音乐会 </td> <td class='hback' width='20%'> <input type='checkbox' name='leisure[]' id='leisure[]' onclick="check_maxnum('leisure', this, 5)" value='7' /> 迪斯科 </td> <td class='hback' width='20%'> <input type='checkbox' name='leisure[]' id='leisure[]' onclick="check_maxnum('leisure', this, 5)" value='8' /> 网吧 </td> <td class='hback' width='20%'> <input type='checkbox' name='leisure[]' id='leisure[]' onclick="check_maxnum('leisure', this, 5)" value='9' /> 温泉 </td> <td class='hback' width='20%'> <input type='checkbox' name='leisure[]' id='leisure[]' onclick="check_maxnum('leisure', this, 5)" value='10' /> 图书馆/书店 </td></tr><tr> <td class='hback' width='20%'> <input type='checkbox' name='leisure[]' id='leisure[]' onclick="check_maxnum('leisure', this, 5)" value='11' /> 咖啡厅 </td> <td class='hback' width='20%'> <input type='checkbox' name='leisure[]' id='leisure[]' onclick="check_maxnum('leisure', this, 5)" value='12' /> 游乐场 </td> <td class='hback' width='20%'> <input type='checkbox' name='leisure[]' id='leisure[]' onclick="check_maxnum('leisure', this, 5)" value='13' /> 卡拉OK </td> <td class='hback' width='20%'> <input type='checkbox' name='leisure[]' id='leisure[]' onclick="check_maxnum('leisure', this, 5)" value='14' /> 体育馆 </td> <td class='hback' width='20%'> <input type='checkbox' name='leisure[]' id='leisure[]' onclick="check_maxnum('leisure', this, 5)" value='15' /> 逛街 </td></tr><tr> <td class='hback' width='20%'> <input type='checkbox' name='leisure[]' id='leisure[]' onclick="check_maxnum('leisure', this, 5)" value='16' /> 在自己或朋友家里 </td> <td class='hback' width='20%'> <input type='checkbox' name='leisure[]' id='leisure[]' onclick="check_maxnum('leisure', this, 5)" value='17' /> 其他 </td> <td class='hback' width='20%'> <input type='checkbox' name='leisure[]' id='leisure[]' onclick="check_maxnum('leisure', this, 5)" value='18' /> 不想说 </td>  </tr></table>
+			 <span id='dleisure' class='f_red'></span></td>
+		  </tr>
+		  <!-- 提交按钮 -->
+		  <tr>
+			<td class='lblock'></td>
+			<td class='rblock' colspan="3">
+			<input type="submit" name="btn_save" value="提交保存" class="button-red" />
+			</td>
+		  </tr>
+	  </table>
+	  </form>
+	  <!--详细资料 End-->
+      
+	  
+	  
+
+	</div>
+	<div class="clear"></div>
+	<!--//div_smallnav_content_hover End-->
+  </div>
+  <div class="clear"></div>
+  <!--//main_right End-->
+
+  <div style="margin: 30px;"></div>
+  <!--//right_kj End-->
+  
+</div>
+<!--//user_main End-->
+
+<div class="user_footer" style="padding-bottom:30px;">
+  红娘客服　　24 小时服务热线 020-12345678<br />
+<p>
+	婚恋交友版权所有 &copy; 2010-<span id="footer-copyright-year">2012 OElove</span> 
+</p>
+<p>
+	<span><a href="http://mb.oephp.com/" target="_blank">婚恋交<span id="__kindeditor_bookmark_start_2__"></span>友网站模板</a><span>&nbsp;</span><a href="http://mb.oephp.com/" target="_blank">PHP同城交友模板</a><span>&nbsp;</span><a href="http://mb.oephp.com/" target="_blank">微信手机交友模板<span id="__kindeditor_bookmark_start_2__"></span></a></span>
+</p>
+</div>
+<!--//user_footer End-->
+<script type='text/javascript'>
+//新信息
+function obj_loading_count(type, tipsid) {
+	$.ajax({
+		type: "POST",
+		url: _ROOT_PATH + "usercp.php?c=popwin&a=count",
+		cache: false,
+		data: {type:type, r:get_rndnum(8)},
+		dataType: "json",
+		beforeSend: function(XMLHttpRequest) {
+			XMLHttpRequest.setRequestHeader("request_type","ajax");
+		},
+		success: function(data) {
+			var json = eval(data);
+			var num = json.num;
+			if (num > 0) {
+				var html = "";
+				html = html+"<font style='color:#51545B;'>(";
+				if (num > 99) {
+					html = html+"99";
+				}
+				else {
+					html = html+num;
+				}
+				html = html+")</font>";
+				$("#"+tipsid).html(html);
+			}
+		},
+		error: function() {}
+	});
+}
+</script>
+<style>
+.popwin-box{
+  position:fixed;
+  bottom:0px; 
+  right:0px;
+  background:url("/tpl/user/images/popwin/popwin_bg.jpg") repeat-x bottom;
+  width:100%;
+  z-index:999;
+}
+.popwin-main {
+	width:330px; 
+	border:1px solid #f0f0f0; 
+	margin-bottom:1px;
+	bottom: 29px;
+	position: absolute;
+	z-index: 9;
+	background:#ffffff;
+
+}
+.popwin-titlebar{background:#F0EDEB; padding:8px;height:20px;}
+.popwin-title{ color: #C70067;display: inline;float: left;font-family: Microsoft YaHei,SimHei;font-size: 14px;line-height: 20px;}
+.popwin-min{float:right; width:13px; height:10px; border-top:3px solid #D83473; line-height:20px; cursor:pointer;margin-top:5px;}
+
+.popwin-menu{
+	width:330px;height:30px;
+	background:url("/tpl/user/images/popwin/popwin_bg.jpg") repeat-x bottom;
+}
+.popwin-menu li{
+	float:left; width:80px; text-align:center;padding:7px 0 0 0; 
+	border-left:1px solid #ddd; position:relative;
+}   
+.popwin-menu li img {vertical-align:middle;padding-bottom:2px;}
+.popwin-menu li:hover{cursor:pointer;}
+.popwin-menu .popwin-tx{
+	width: 8px; height: 8px; 
+	background: url(/tpl/user/images/icon.png) repeat scroll -100px -275px transparent; 
+	position:absolute; top:9px; left:3px; display:none;
+}
+.popwin-menu span{padding-top:5px;}
+
+.popwin-content {
+	width:310px;padding:10px;background:#ffffff;
+}
+.popwin-content .popwin-nothing{
+	padding:20px;line-height:20px;text-align:center;color:#666666;
+}
+
+
+
+.zm_popwin_left {
+	float:left;width:50%;height:30px;color:#666666;
+	position:fixed;
+	bottom:0px; 
+}
+.zm_popwin_left ul li {
+	float:left;line-height:30px;height:30px;
+}
+.zm_popwin_left ul li img {
+	vertical-align:middle;
+}
+.zm_popwin_left .zm_popwin_rightbor {border-right:1px solid #ccc;}
+
+.zm_popwin_right {
+	float:right;width:330px;
+}
+</style>
+<div class="popwin-box" style="display:none;">
+  
+  <div class="zm_popwin_left">
+    <ul>
+	  <li style="padding-left:20px;padding-right:10px;" class="zm_popwin_rightbor"><a href="/usercp.php">会员中心</a></li>
+	  <li style="padding-left:10px;padding-right:10px;" class="zm_popwin_rightbor"><img src="/tpl/user/images/popwin/popwin_avatar.gif"><a href="/usercp.php?c=avatar">设置形象照</a></li>
+	  
+	  <li style="padding-left:10px;padding-right:10px;">
+		<a href="/usercp.php?c=vip"><img title="VIP服务" src="/tpl/user/images/popwin/popwin_vip.png"></a>&nbsp;
+		<a href="/usercp.php?c=certify"><img title="诚信认证" src="/tpl/user/images/popwin/cid.png"></a>&nbsp;&nbsp;
+		<a href="/usercp.php?c=cond">修改择友条件</a>
+	  </li>
+
+	</ul>
+	<div style="clear:both;"></div>
+  </div>
+  <!--//zm_popwin_left End-->
+
+  <div class="zm_popwin_right">
+
+	  <div class="popwin-main" style="display:none;" id="popwin-main">
+		<div class="popwin-titlebar">
+		  <span class="popwin-title"></span>
+		  <div class="popwin-min" title="关闭消息"></div>
+		  <div class="clear"></div>
+		</div>
+		<div class="popwin-content" id="popwin-data">
+		
+		</div>
+	  </div>
+	  <!--/popwin_main End-->
+	  
+	  <input type="hidden" id="click_menu_value" value="" />
+	  <div class="popwin-menu">
+		<ul>
+		  <li onclick="obj_click_menu('msg', '2', '我的信件');">
+		  <div class="popwin-tx"></div><img src="/tpl/user/images/popwin/popwin_letter.gif">信件<span id="popwinmsg"><script>obj_loading_count('msg', 'popwinmsg');</script></span>
+		  </li>
+
+		  <li onclick="obj_click_menu('hi', '1', '我的招呼');">
+		  <div class="popwin-tx"></div><img src="/tpl/user/images/popwin/popwin_hi.gif">招呼<span id="popwinhi"><script>obj_loading_count('hi', 'popwinhi');</script></span>
+		  </li>
+
+		  <li onclick="obj_click_menu('gift', '3', '我的礼物');">
+		  <div class="popwin-tx"></div><img src="/tpl/user/images/popwin/popwin_gift.gif">礼物<span id="popwingift"><script>obj_loading_count('gift', 'popwingift');</script></span>
+		  </li>
+		  <li onclick="obj_click_menu('sysmsg', '1', '我的消息');">
+		  <div class="popwin-tx"></div><img src="/tpl/user/images/popwin/popwin_gg.gif">消息<span id="popwinsysmsg"><script>obj_loading_count('sysmsg', 'popwinsysmsg');</script></span>
+		  </li>
+		</ul>
+	  </div>
+	  <!--//popwin-menu End-->
+ 
+  </div>
+  <!--//zm_popwin_right End-->
+  <div style="clear"></div>
+
+
+
+</div>
+<script type='text/javascript'>
+$(function() {
+	$(".popwin-tx").addClass("block");
+	//最小化
+    $(".popwin-min").click(function() {
+        $(".popwin-main").slideUp("slow");
+    });
+});
+
+//扑捉区域
+function obj_click_menu(id, num, title) {
+	var _v = $("#click_menu_value").val();
+	//同一区域
+	if (_v == id) {
+		$(".popwin-title").html(title);
+		if ($("#popwin-main").css('display') == 'none') {
+			$(".popwin-main").slideDown("slow");
+			obj_popwin_data(id, num, "popwin-data");
+		}
+		else {
+			$(".popwin-main").slideUp("slow");
+		}
+	}
+	//不同区域
+	else {
+		if ($("#popwin-main").css('display') == 'block') {
+			$(".popwin-main").slideUp("slow");
+		}
+		$("#click_menu_value").val(id);
+		$(".popwin-title").html(title);
+		$(".popwin-main").slideDown("slow");
+		obj_popwin_data(id, num, "popwin-data");
+	}
+}
+
+//获取数据
+function obj_popwin_data(type, num, tips) {
+	$("#"+tips).html("<div style='text-align:center;padding:10px;color:#999999;'>loading</div>");
+	$.ajax({
+		type: "POST",
+		url: _ROOT_PATH + "usercp.php?c=popwin",
+		cache: false,
+		data: {a:type, num:num, r:get_rndnum(8)},
+		dataType: "json",
+		beforeSend: function(XMLHttpRequest) {
+			XMLHttpRequest.setRequestHeader("request_type","ajax");
+		},
+		success: function(data) {
+			var json = eval(data);
+			var result = json.result;
+			$("#"+tips).html(result);
+		},
+		error: function() {}
+	});
+}
+
+//imbox
+function obj_imbox() {
+	var tips = "popwin-data";
+	$.ajax({
+		type: "POST",
+		url: _ROOT_PATH + "usercp.php?c=popwin",
+		cache: false,
+		data: {r:get_rndnum(8)},
+		dataType: "json",
+		success: function(data) {
+			var json = eval(data);
+			var response = json.response;
+			var result = json.result;
+			var type = json.type;
+			//存在数据
+			if (response == 1) {
+				var title = '';
+				if (type == 'newvisit') {
+					title = '谁访问了我';
+				}
+				$(".popwin-title").html(title);
+				$("#"+tips).html(result);
+				if ($("#popwin-main").css('display') == 'block') {
+					$(".popwin-main").slideUp("slow");
+				}
+				$(".popwin-main").slideDown("slow");
+			}
+		},
+		error: function() {}
+	});
+}
+</script>
+
+<script type="text/javascript">
+jQuery(".drop").slide({ type:"menu", titCell:".cin", targetCell:".sub",effect:"slideDown",delayTime:300,triggerTime:0,defaultPlay:false,returnDefault:true});
+</script>
+</body>
+</html>
+<script type="text/javascript">
+//基本资料
+function checkbase() {
+	var t = "";
+	var v = "";
+
+	t = "marrystatus";
+	v = $("#"+t).val();
+	if(v=="") {
+		dmsg("请选择婚姻状况", t);
+		return false;
+	}
+
+	t = "height";
+	v = $("#"+t).val();
+	if(v=="") {
+		dmsg("请选择身高", t);
+		return false;
+	}
+
+	//所在地区
+	t = "provinceid";
+	v = $("#"+t).val();
+	if(v=="") {
+		dmsg("请选择所在地区", t);
+		return false;
+	}
+	//所在地区
+	t = "cityid";
+	v = $("#"+t).val();
+	if(v=="") {
+		dmsg("请选择所在地区", t);
+		return false;
+	}
+
+	//交友类型
+	t = "lovesort";
+	v = $("#"+t).val();
+	if(v=="") {
+		dmsg("请选择交友类别", t);
+		return false;
+	}
+
+	//月薪
+	t = "salary";
+	v = $("#"+t).val();
+	if(v=="") {
+		dmsg("请选择月薪收入", t);
+		return false;
+	}
+	
+	$('#myform').submit();
+	return true;
+}
+
+//内心独白
+function checkmonolog() {
+	var t = "";
+	var v = "";
+
+	//内心独白
+	t = 'content';
+	v = $('#'+t).val();
+	if (v == '') {
+		dmsg("内心独白不能为空", t);
+		return false;
+	}
+	else {
+		if (strQuantity(v)<20 || strQuantity(v)>1500) {
+			dmsg("内心独白字数必须在20~1500个字之间", t);
+			$('#'+t).focus();
+			return false;
+		}
+	}
+
+	$('#myform').submit();
+	return true;
+}
+
+
+</script>

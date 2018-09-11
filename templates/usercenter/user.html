@@ -1,0 +1,814 @@
+{% extends '../base.htm' %}
+{% block add_css %}
+	<link rel="stylesheet" href="/static/css/user/user.css" />
+{% endblock %}
+{% block content %}
+<div class="user_main">
+  <div class="oe_bn"><span></span><a href="/usercp.php">会员中心</a> &gt;&gt; 我的资料</div>
+  <div class="user_main_left">
+  <div class="oe_index_uL_top">
+    <div class="oe_index_uL_head">
+	  <dl>
+	    <dt>
+        <a href="/usercp.php?c=avatar">
+					{% if userinfo.img %}
+						<img src="/{{ userinfo.img }}" title="设置头像" />
+					{% else %}
+						{% if userinfo.gender %}
+							<img src="/static/imgs/img/gender_1.gif" title="设置头像" />
+						{% else %}
+							<img src="/static/imgs/img/gender_2.gif" title="设置头像" />
+						{% endif %}
+					{% endif %}
+				</a>
+      </dt>
+      <dd>
+        <h2>{{ username }}</h2>
+        <h3><a href="/index.php?c=home&uid=164084" target="_blank">查看我的主页</a></h3>
+      </dd>
+      <div class="clear"></div>
+	  </dl>
+	  <div class="clear"></div>
+
+    </div>
+    <div class="oe_uL_rz">
+      <div class="oe_uL_rz_name">
+	  征友状态：
+	  	  进行中
+	  	  <a href="/usercp.php?c=account&a=setstatus">修改</a>
+	  </div>
+   	<!--<div class="oe_uL_rz_con">
+			<img src="/tpl/user/images/a1_h.png" title="身份证未认证" />
+			<img src="/tpl/user/images/a2_h.png" title="邮箱未认证" />
+			<img src="/tpl/user/images/a3_h.png" title="视频未认证" />
+			<a href="/usercp.php?c=certify">诚信认证</a>
+	  </div>-->
+    </div>
+    <div class="oe_index_uL_jb">
+      <ul>
+        <li><span><a href="/usercp.php?c=money">0</a></span>我的金币</li>
+        <li><span><a href="/usercp.php?c=points">10</a></span>我的积分</li>
+        <div class="clear"></div>
+      </ul>
+    </div>
+    <div class="mu_profile">
+      <a href="#" class="a_1">在线充值</a>
+      <a href="/usercp.php?c=profile" class="a_2">完善资料</a>
+    </div>
+  </div>
+  <div class="oe_hr"></div>
+  <!--<div class="u_menu">
+    <ul>
+      <li><i class="ico_1"></i><a href="/usercp.php?c=vip">会员服务</a></li>
+      <li><i class="ico_2"></i><a href="/usercp.php?c=message">私信</a></li>
+      <li><i class="ico_3"></i><a href="/usercp.php?c=gift">礼物</a></li>
+      <li><i class="ico_4"></i><a href="/usercp.php?c=listen">关注</a></li>
+      <li><i class="ico_5"></i><a href="/usercp.php?c=visitme">谁看过我</a></li>
+      <li><i class="ico_6"></i><a href="/usercp.php?c=weibo">心情微博</a></li>
+      <li><i class="ico_7"></i><a href="/usercp.php?c=diary">日记</a></li>
+      <li><i class="ico_10"></i><a href="/usercp.php?c=myparty">我报名的活动</a></li>
+      <li><i class="ico_8"></i><a href="/usercp.php?c=extend&a=connect">其它</a></li>
+    </ul>
+  </div>-->
+  <div class="u_photo">
+    <dl>
+      <dt>
+        <a href="/usercp.php?c=album&a=upload"><span></span></a>
+      </dt>
+      <dd>
+        <a href="/usercp.php?c=album&a=upload"><b>上传美照</b><br>获取更多关注</a>
+      </dd>
+      <div class="clear"></div>
+    </dl>
+  </div>
+  </div>
+  <!--//user_main_left End-->
+
+  <div class="main_right">
+	  <div class="oe_tab_nv">
+	    <ul>
+		  <li class="tab_item current"><a href="/usercp.php?c=profile">基本资料</a></li>
+		  <li class="tab_item"><a href="/usercp.php?c=profile&a=more">详细资料</a></li>
+		  <li class="tab_item"><a href="/usercp.php?c=profile&a=monolog">内心独白</a></li>
+		  <li class="tab_item"><a href="/usercp.php?c=profile&a=contact">联系资料</a></li>
+		  	    </ul>
+	  </div>
+	<div class="div_smallnav_content_hover basicdata">
+	  
+	   
+	  <!--基本资料 Begin-->
+	  <form name="myform" id="myform" action="/usercp.php?c=profile&a=savebase" method="post">
+	  <table cellpadding='0' cellspacing='0' border='0' width="98%" class="user-table table-margin lh35">
+		  <tr>
+			<td colspan="4" style="padding-bottom:10px;"><div class="item_title" style="width:100%"><p>基本资料</p><span class="shadow"></span></div></td>
+		  </tr>
+		  <!-- 邮箱、名称 -->
+		  <tr>
+			<td class='lblock' width='15%'>登录邮箱 <span class='f_red'></span></td>
+			<td class='rblock' width='35%'><font color="#999999">{{ userinfo.login_id.email }} </font></td>
+			<td class='lblock' width='15%'>用 户 名 <span class='f_red'></span></td>
+			<td class='rblock' width='35%'>&nbsp;<font color="#999999">{{ username }}</font></td>
+		  </tr>
+		  <!-- 性别、生日 -->
+		  <tr>
+			<td class='lblock'>性 别 <span class='f_red'></span></td>
+			<td class='rblock'><font color="#999999">
+			{% if userinfo.gender %}
+				男
+			{% else %}
+				女
+			{% endif %}
+			</font> </td>
+			<td class='lblock'>生 日 <span class='f_red'></span></td>
+			<td class='rblock'><font color="#999999">{{ userinfo.birthday }}&nbsp;&nbsp;19  岁</font></td>
+		  </tr>
+		  <!-- 星座、生肖 -->
+		  <tr>
+			<td class='lblock'>星 座 <span class='f_red'></span></td>
+			<td class='rblock'><font color="#999999">双子座</font> </td>
+			<td class='lblock'>生 肖 <span class='f_red'></span></td>
+			<td class='rblock'><font color="#999999">兔</font> </td>
+		  </tr>
+		  <!-- 婚姻、身高 -->
+		  <tr>
+			<td class='lblock'>婚姻状态 <span class='f_red'>*</span></td>
+			<td class='rblock'>
+			<select name='marrystatus' id='marrystatus'><option value=''>=请选择=</option><option value='1' selected>未婚</option><option value='2'>已婚</option><option value='3'>离异</option><option value='4'>丧偶</option></select>
+			<span class='f_red' id='dmarrystatus'></span></td>
+			<td class='lblock'>身 高 <span class='f_red'>*</span></td>
+			<td class='rblock'>
+			<select name='height' id='height'><option value=''>=请选择=</option><option value='130'>130</option><option value='131'>131</option><option value='132'>132</option><option value='133'>133</option><option value='134'>134</option><option value='135'>135</option><option value='136'>136</option><option value='137'>137</option><option value='138'>138</option><option value='139'>139</option><option value='140'>140</option><option value='141'>141</option><option value='142'>142</option><option value='143'>143</option><option value='144'>144</option><option value='145'>145</option><option value='146'>146</option><option value='147'>147</option><option value='148'>148</option><option value='149'>149</option><option value='150'>150</option><option value='151'>151</option><option value='152'>152</option><option value='153'>153</option><option value='154'>154</option><option value='155'>155</option><option value='156'>156</option><option value='157'>157</option><option value='158'>158</option><option value='159'>159</option><option value='160' selected>160</option><option value='161'>161</option><option value='162'>162</option><option value='163'>163</option><option value='164'>164</option><option value='165'>165</option><option value='166'>166</option><option value='167'>167</option><option value='168'>168</option><option value='169'>169</option><option value='170'>170</option><option value='171'>171</option><option value='172'>172</option><option value='173'>173</option><option value='174'>174</option><option value='175'>175</option><option value='176'>176</option><option value='177'>177</option><option value='178'>178</option><option value='179'>179</option><option value='180'>180</option><option value='181'>181</option><option value='182'>182</option><option value='183'>183</option><option value='184'>184</option><option value='185'>185</option><option value='186'>186</option><option value='187'>187</option><option value='188'>188</option><option value='189'>189</option><option value='190'>190</option><option value='191'>191</option><option value='192'>192</option><option value='193'>193</option><option value='194'>194</option><option value='195'>195</option><option value='196'>196</option><option value='197'>197</option><option value='198'>198</option><option value='199'>199</option><option value='200'>200</option></select> CM
+			<span class='f_red' id='dheight'></span>
+			</td>
+		  </tr>
+		  <!-- 血型、有无子女 -->
+		  <tr>
+			<td class='lblock'>血 型 <span class='f_red'></span></td>
+			<td class='rblock'><select name='blood' id='blood'><option value=''>=请选择=</option><option value='1'>A型</option><option value='2'>B型</option><option value='3'>O型</option><option value='4'>AB型</option><option value='5'>其他</option></select> <span id='dblood' class='f_red'></span></td>
+			<td class='lblock'>有无子女 <span class='f_red'></span></td>
+			<td class='rblock'><select name='childrenstatus' id='childrenstatus'><option value=''>=请选择=</option><option value='1'>无小孩</option><option value='2'>有,和我住一起</option><option value='3'>有,有时和我住一起</option><option value='4'>有,不和我住一起</option></select> <span id='dchildrenstatus' class='f_red'></span></td>
+		  </tr>
+		  <!-- 国籍，户籍 -->
+		  <tr>
+			<td class='lblock'>国 籍 <span class='f_red'></span></td>
+			<td class='rblock'><select name='nationality' id='nationality'><option value=''>=请选择=</option><option value='1'>中国大陆</option><option value='2'>中国台湾</option><option value='3'>中国香港</option><option value='4'>中国澳门</option><option value='5'>韩国</option><option value='6'>朝鲜</option><option value='7'>瑙鲁</option><option value='8'>印度尼西亚</option><option value='9'>美国</option><option value='10'>加拿大</option><option value='11'>日本</option><option value='12'>俄罗斯</option><option value='13'>英国</option><option value='14'>德国</option><option value='15'>意大利</option><option value='16'>法国</option><option value='17'>芬兰</option><option value='18'>瑞典</option><option value='19'>瑞士</option><option value='20'>南非</option><option value='21'>蒙古</option><option value='22'>越南</option><option value='23'>缅甸</option><option value='24'>泰国</option><option value='25'>老挝</option><option value='26'>菲律宾</option><option value='27'>西班牙</option><option value='28'>葡萄牙</option></select> <span id='dnationality' class='f_red'></span></td>
+			<td class='lblock'>户 籍 <span class='f_red'></span></td>
+			<td class='rblock'>
+			<select name='nationprovinceid' id='nationprovinceid' onchange="fetch_hometown('nationprovinceid', 'nationcityid', '0', '=请选择=');"><option value=''>=请选择=</option><option value='1'>北京</option><option value='3'>天津</option><option value='5'>上海</option><option value='7'>重庆</option><option value='9'>广东</option><option value='33'>江苏</option><option value='57'>浙江</option><option value='85'>福建</option><option value='98'>湖南</option><option value='122'>湖北</option><option value='152'>山东</option><option value='177'>辽宁</option><option value='198'>吉林</option><option value='218'>云南</option><option value='233'>四川</option><option value='252'>安徽</option><option value='271'>江西</option><option value='286'>黑龙江</option><option value='306'>河北</option><option value='326'>陕西</option><option value='336'>海南</option><option value='342'>河南</option><option value='362'>山西</option><option value='374'>内蒙古</option><option value='392'>广西</option><option value='405'>贵州</option><option value='416'>宁夏</option><option value='421'>青海</option><option value='427'>新疆</option><option value='445'>西藏</option><option value='449'>甘肃</option><option value='463'>台湾</option><option value='469'>香港</option><option value='471'>澳门</option><option value='473'>国外</option><option value='475'>其他</option></select>&nbsp;<span id='dnationprovinceid' class='f_red'></span>
+			<span id="json_nationcityid">
+			
+			</span>&nbsp;<span id='dnationcityid' class='f_red'></span>
+			</td>
+		  </tr>
+		  <!-- 所在地、交友目的 -->
+		  <tr>
+			<td class='lblock'>所在地区 <span class='f_red'>*</span></td>
+			<td class='rblock'>
+			<select name='provinceid' id='provinceid' onchange="fetch_city('provinceid', 'cityid', '0', '=请选择=', '1', 'distid', '0');"><option value=''>=请选择=</option><option value='1'>北京</option><option value='3'>天津</option><option value='5' selected>上海</option><option value='7'>重庆</option><option value='9'>广东</option><option value='33'>江苏</option><option value='57'>浙江</option><option value='85'>福建</option><option value='98'>湖南</option><option value='122'>湖北</option><option value='152'>山东</option><option value='177'>辽宁</option><option value='198'>吉林</option><option value='218'>云南</option><option value='233'>四川</option><option value='252'>安徽</option><option value='271'>江西</option><option value='286'>黑龙江</option><option value='306'>河北</option><option value='326'>陕西</option><option value='336'>海南</option><option value='342'>河南</option><option value='362'>山西</option><option value='374'>内蒙古</option><option value='392'>广西</option><option value='405'>贵州</option><option value='416'>宁夏</option><option value='421'>青海</option><option value='427'>新疆</option><option value='445'>西藏</option><option value='449'>甘肃</option></select>&nbsp;<span id='provinceid' class='f_red'></span>
+			<span id="json_cityid">
+			<select name='cityid' id='cityid' onchange="fetch_dist('cityid', 'distid', '0', '=请选择=');"><option value=''>=请选择=</option><option value='6'>黄浦</option><option value='514'>南区</option><option value='515'>卢湾</option><option value='516'>徐汇</option><option value='517'>长宁</option><option value='518'>静安</option><option value='519'>普陀</option><option value='520'>闸北</option><option value='521'>虹口</option><option value='522'>杨浦</option><option value='523'>闵行</option><option value='524'>宝山</option><option value='525'>嘉定</option><option value='526'>浦东新区</option><option value='527'>金山</option><option value='528'>松江</option><option value='529'>南汇</option><option value='530'>奉贤</option><option value='531'>青浦</option><option value='532'>崇明</option></select>
+			</span>&nbsp; <span id='dcityid' class='f_red'></span>
+			<span id="json_distid">
+			
+			</span>
+			</td>
+			<td class='lblock'>交友类别 <span class='f_red'>*</span></td>
+			<td class='rblock'><select name='lovesort' id='lovesort'><option value=''>=请选择=</option><option value='1'>朋友</option><option value='2'>知己</option><option value='3'>恋爱</option><option value='4'>结婚</option></select> <span id='dlovesort' class='f_red'></span></td>
+		  </tr>
+		  <!-- 个性、民族 -->
+		  <tr>
+			<td class='lblock'>个 性 <span class='f_red'></span></td>
+			<td class='rblock'><select name='personality' id='personality'><option value=''>=请选择=</option><option value='1'>浪漫迷人</option><option value='2'>成熟稳重</option><option value='3'>风趣幽默</option><option value='4'>乐天达观</option><option value='5'>活泼可爱</option><option value='6'>忠厚老实</option><option value='7'>淳朴害羞</option><option value='8'>温柔体贴</option><option value='9'>多愁善感</option><option value='10'>新潮时尚</option><option value='11'>热辣动感</option><option value='12'>豪放不羁</option></select> <span id="dpersonality"></span></td>
+			<td class='lblock'>民 族 <span class='f_red'></span></td>
+			<td class='rblock'><select name='national' id='national'><option value=''>=请选择=</option><option value='1'>汉族</option><option value='2'>藏族</option><option value='3'>朝鲜族</option><option value='4'>蒙古族</option><option value='5'>回族</option><option value='6'>满族</option><option value='7'>维吾尔族</option><option value='8'>壮族</option><option value='9'>彝族</option><option value='10'>苗族</option><option value='11'>其他民族</option></select> <span id='dnational' class='f_red'></span></td>
+		  </tr>
+		  <!-- 行业、月薪 -->
+		  <tr>
+			<td class='lblock'>职 业 <span class='f_red'></span></td>
+			<td class='rblock'><select name='jobs' id='jobs'><option value=''>=请选择=</option><option value='1'>在校学生</option><option value='2'>计算机/互联网/IT</option><option value='3'>电子/半导体/仪表仪器</option><option value='4'>通信技术</option><option value='5'>销售</option><option value='6'>市场拓展</option><option value='7'>公关/商务</option><option value='8'>采购/贸易</option><option value='9'>客户服务/技术支持</option><option value='10'>人力资源/行政管理</option><option value='11'>高级管理</option><option value='12'>生产/加工/制造</option><option value='13'>质控/安检</option><option value='14'>工程机械</option><option value='15'>技工</option><option value='16'>会计/审计/统计</option><option value='17'>金融/证券/投资</option><option value='18'>房地产/装修/物业</option><option value='19'>仓储/物流</option><option value='20'>交通/运输</option><option value='21'>普通劳动力/家政服务</option><option value='22'>普通服务行业</option><option value='23'>航空服务行业</option><option value='24'>教育/培训</option><option value='25'>咨询/顾问</option><option value='26'>学术/科研</option><option value='27'>法律</option><option value='28'>设计/创意</option><option value='29'>文学/传媒/影视</option><option value='30'>餐饮/旅游</option><option value='31'>化工</option><option value='32'>能源/地质勘查</option><option value='33'>医疗/护理</option><option value='34'>保健/美容</option><option value='35'>生物/制药/医疗器械</option><option value='36'>体育工作者</option><option value='37'>翻译</option><option value='38'>公务员/国家干部</option><option value='39'>私营业主</option><option value='40'>农/林/牧/渔业</option><option value='41'>警察/其他</option><option value='42'>自由职业者</option><option value='43'>其他</option></select> <span id="djobs"></span></td>
+			<td class='lblock'>月薪收入 <span class='f_red'>*</span></td>
+			<td class='rblock'><select name='salary' id='salary'><option value=''>=请选择=</option><option value='1'>2000元以下</option><option value='2'>2000~5000元</option><option value='3'>5000~10000元</option><option value='4'>10000~20000元</option><option value='5'>20000元以上</option></select> <span id='dsalary' class='f_red'></span></td>
+		  </tr>
+		  <!-- 住房、购车 -->
+		  <tr>
+			<td class='lblock'>住房情况 <span class='f_red'></span></td>
+			<td class='rblock'><select name='housing' id='housing'><option value=''>=请选择=</option><option value='1'>暂未购房</option><option value='2'>需要时置房</option><option value='3'>已购住房</option><option value='4'>与人合租</option><option value='5'>独自租房</option><option value='6'>与父母同住</option><option value='7'>住亲朋家</option><option value='8'>住单位房</option></select> <span id="dhousing"></span></td>
+			<td class='lblock'>购车情况 <span class='f_red'></span></td>
+			<td class='rblock'><select name='caring' id='caring'><option value=''>=请选择=</option><option value='1'>暂未购车</option><option value='2'>已经购车</option></select> <span id="dcaring"></span></td>
+		  </tr>
+
+		  <tr>
+			<td colspan="4" style="padding-top:10px;padding-bottom:10px;"><div class="item_title" style="width:100%"><p>外貌体型</p><span class="shadow"></span></div></td>
+		  </tr>
+		  <!-- 体重、外貌自评 -->
+		  <tr>
+			<td class='lblock'>体 重 <span class='f_red'></span></td>
+			<td class='rblock'><select name='weight' id='weight'><option value=''></option><option value='30'>30</option><option value='31'>31</option><option value='32'>32</option><option value='33'>33</option><option value='34'>34</option><option value='35'>35</option><option value='36'>36</option><option value='37'>37</option><option value='38'>38</option><option value='39'>39</option><option value='40'>40</option><option value='41'>41</option><option value='42'>42</option><option value='43'>43</option><option value='44'>44</option><option value='45'>45</option><option value='46'>46</option><option value='47'>47</option><option value='48'>48</option><option value='49'>49</option><option value='50'>50</option><option value='51'>51</option><option value='52'>52</option><option value='53'>53</option><option value='54'>54</option><option value='55'>55</option><option value='56'>56</option><option value='57'>57</option><option value='58'>58</option><option value='59'>59</option><option value='60'>60</option><option value='61'>61</option><option value='62'>62</option><option value='63'>63</option><option value='64'>64</option><option value='65'>65</option><option value='66'>66</option><option value='67'>67</option><option value='68'>68</option><option value='69'>69</option><option value='70'>70</option><option value='71'>71</option><option value='72'>72</option><option value='73'>73</option><option value='74'>74</option><option value='75'>75</option><option value='76'>76</option><option value='77'>77</option><option value='78'>78</option><option value='79'>79</option><option value='80'>80</option><option value='81'>81</option><option value='82'>82</option><option value='83'>83</option><option value='84'>84</option><option value='85'>85</option><option value='86'>86</option><option value='87'>87</option><option value='88'>88</option><option value='89'>89</option><option value='90'>90</option><option value='91'>91</option><option value='92'>92</option><option value='93'>93</option><option value='94'>94</option><option value='95'>95</option><option value='96'>96</option><option value='97'>97</option><option value='98'>98</option><option value='99'>99</option><option value='100'>100</option><option value='101'>101</option><option value='102'>102</option><option value='103'>103</option><option value='104'>104</option><option value='105'>105</option><option value='106'>106</option><option value='107'>107</option><option value='108'>108</option><option value='109'>109</option><option value='110'>110</option><option value='111'>111</option><option value='112'>112</option><option value='113'>113</option><option value='114'>114</option><option value='115'>115</option><option value='116'>116</option><option value='117'>117</option><option value='118'>118</option><option value='119'>119</option><option value='120'>120</option><option value='121'>121</option><option value='122'>122</option><option value='123'>123</option><option value='124'>124</option><option value='125'>125</option><option value='126'>126</option><option value='127'>127</option><option value='128'>128</option><option value='129'>129</option><option value='130'>130</option><option value='131'>131</option><option value='132'>132</option><option value='133'>133</option><option value='134'>134</option><option value='135'>135</option><option value='136'>136</option><option value='137'>137</option><option value='138'>138</option><option value='139'>139</option><option value='140'>140</option><option value='141'>141</option><option value='142'>142</option><option value='143'>143</option><option value='144'>144</option><option value='145'>145</option><option value='146'>146</option><option value='147'>147</option><option value='148'>148</option><option value='149'>149</option><option value='150'>150</option></select> 公斤</td>
+			<td class='lblock'>外貌自评 <span class='f_red'></span></td>
+			<td class='rblock'><select name='profile' id='profile'><option value=''>=请选择=</option><option value='1'>文质彬彬型</option><option value='2'>西部牛仔型</option><option value='3'>阳光帅气型</option><option value='4'>风度翩翩型</option><option value='5'>成熟魅力型</option><option value='6'>健壮高大型</option><option value='7'>朴实无华型</option><option value='8'>内敛酷男型</option><option value='9'>秀外慧中</option><option value='10'>眉清目秀</option><option value='11'>明眸善睐</option><option value='12'>娇小依人</option><option value='13'>青春活泼</option><option value='14'>成熟魅力</option><option value='15'>雍容华贵</option><option value='16'>淡雅如菊</option></select> </td>
+		  </tr>
+		  <!-- 特征、发型 -->
+		  <tr>
+			<td class='lblock'>魅力部位 <span class='f_red'></span></td>
+			<td class='rblock'><select name='charmparts' id='charmparts'><option value=''>=请选择=</option><option value='1'>笑容</option><option value='2'>眉毛</option><option value='3'>眼睛</option><option value='4'>头发</option><option value='5'>鼻梁</option><option value='6'>嘴唇</option><option value='7'>牙齿</option><option value='8'>颈部</option><option value='9'>耳朵</option><option value='10'>手</option><option value='11'>胳膊</option><option value='12'>胸部</option><option value='13'>腰部</option><option value='14'>臀部</option><option value='15'>腿</option><option value='16'>脚</option><option value='17'>没有太特别的</option></select> </td>
+			<td class='lblock'>发 型 <span class='f_red'></span></td>
+			<td class='rblock'><select name='hairstyle' id='hairstyle'><option value=''>=请选择=</option><option value='1'>顺直长发</option><option value='2'>卷曲长发</option><option value='3'>中等长度</option><option value='4'>短发</option><option value='5'>很短</option><option value='6'>光头</option><option value='7'>其他</option></select> </td>
+		  </tr>
+		  <!-- 发色、面型 -->
+		  <tr>
+			<td class='lblock'>发 色 <span class='f_red'></span></td>
+			<td class='rblock'><select name='haircolor' id='haircolor'><option value=''>=请选择=</option><option value='1'>黑色</option><option value='2'>金色</option><option value='3'>褐色</option><option value='4'>栗色</option><option value='5'>灰色</option><option value='6'>红色</option><option value='7'>白色</option><option value='8'>挑染</option><option value='9'>光头</option><option value='10'>其它</option></select> </td>
+			<td class='lblock'>脸 型 <span class='f_red'></span></td>
+			<td class='rblock'><select name='facestyle' id='facestyle'><option value=''>=请选择=</option><option value='1'>圆脸型</option><option value='2'>方脸型</option><option value='3'>长脸型</option><option value='4'>瓜子脸型</option><option value='5'>鸭蛋脸型</option><option value='6'>国字脸型</option><option value='7'>三角脸型</option><option value='8'>菱形脸型</option></select> </td>
+		  </tr>
+		  <!-- 体型 -->
+		  <tr>
+			<td class='lblock'>体 型 <span class='f_red'></span></td>
+			<td class='rblock' colspan="3"><select name='bodystyle' id='bodystyle'><option value=''>=请选择=</option><option value='1'>瘦</option><option value='2'>较瘦</option><option value='3'>匀称</option><option value='4'>苗条</option><option value='5'>高挑</option><option value='6'>丰满</option><option value='7'>健壮</option><option value='8'>魁梧</option><option value='9'>胖</option><option value='10'>较胖</option></select> </td>
+		  </tr>
+		  <!-- 提交按钮 -->
+		  <tr>
+			<td class='lblock' height="50px"></td>
+			<td class='rblock' colspan="3">				
+			<input type="button" name="btn_save" value="提交保存" onclick="return checkbase();" class="button-red" />
+			</td>
+		  </tr>
+	  </table>
+	  </form>
+	  <!--基本资料 End-->
+	</div>
+	<div class="clear"></div>
+	<!--//div_smallnav_content_hover End-->
+  </div>
+  <div class="clear"></div>
+  <!--//main_right End-->
+
+  <div style="margin: 30px;"></div>
+  <!--//right_kj End-->
+  
+</div>
+<!--//user_main End-->
+
+<script type='text/javascript'>
+//新信息
+function obj_loading_count(type, tipsid) {
+	$.ajax({
+		type: "POST",
+		url: _ROOT_PATH + "usercp.php?c=popwin&a=count",
+		cache: false,
+		data: {type:type, r:get_rndnum(8)},
+		dataType: "json",
+		beforeSend: function(XMLHttpRequest) {
+			XMLHttpRequest.setRequestHeader("request_type","ajax");
+		},
+		success: function(data) {
+			var json = eval(data);
+			var num = json.num;
+			if (num > 0) {
+				var html = "";
+				html = html+"<font style='color:#51545B;'>(";
+				if (num > 99) {
+					html = html+"99";
+				}
+				else {
+					html = html+num;
+				}
+				html = html+")</font>";
+				$("#"+tipsid).html(html);
+			}
+		},
+		error: function() {}
+	});
+}
+</script>
+<style>
+.popwin-box{
+  position:fixed;
+  bottom:0px; 
+  right:0px;
+  background:url("/tpl/user/images/popwin/popwin_bg.jpg") repeat-x bottom;
+  width:100%;
+  z-index:999;
+}
+.popwin-main {
+	width:330px; 
+	border:1px solid #f0f0f0; 
+	margin-bottom:1px;
+	bottom: 29px;
+	position: absolute;
+	z-index: 9;
+	background:#ffffff;
+
+}
+.popwin-titlebar{background:#F0EDEB; padding:8px;height:20px;}
+.popwin-title{ color: #C70067;display: inline;float: left;font-family: Microsoft YaHei,SimHei;font-size: 14px;line-height: 20px;}
+.popwin-min{float:right; width:13px; height:10px; border-top:3px solid #D83473; line-height:20px; cursor:pointer;margin-top:5px;}
+
+.popwin-menu{
+	width:330px;height:30px;
+	background:url("/tpl/user/images/popwin/popwin_bg.jpg") repeat-x bottom;
+}
+.popwin-menu li{
+	float:left; width:80px; text-align:center;padding:7px 0 0 0; 
+	border-left:1px solid #ddd; position:relative;
+}   
+.popwin-menu li img {vertical-align:middle;padding-bottom:2px;}
+.popwin-menu li:hover{cursor:pointer;}
+.popwin-menu .popwin-tx{
+	width: 8px; height: 8px; 
+	background: url(/tpl/user/images/icon.png) repeat scroll -100px -275px transparent; 
+	position:absolute; top:9px; left:3px; display:none;
+}
+.popwin-menu span{padding-top:5px;}
+
+.popwin-content {
+	width:310px;padding:10px;background:#ffffff;
+}
+.popwin-content .popwin-nothing{
+	padding:20px;line-height:20px;text-align:center;color:#666666;
+}
+
+
+
+.zm_popwin_left {
+	float:left;width:50%;height:30px;color:#666666;
+	position:fixed;
+	bottom:0px; 
+}
+.zm_popwin_left ul li {
+	float:left;line-height:30px;height:30px;
+}
+.zm_popwin_left ul li img {
+	vertical-align:middle;
+}
+.zm_popwin_left .zm_popwin_rightbor {border-right:1px solid #ccc;}
+
+.zm_popwin_right {
+	float:right;width:330px;
+}
+</style>
+<div class="popwin-box" style="display:none;">
+  
+  <div class="zm_popwin_left">
+    <ul>
+	  <li style="padding-left:20px;padding-right:10px;" class="zm_popwin_rightbor"><a href="/usercp.php">会员中心</a></li>
+	  <li style="padding-left:10px;padding-right:10px;" class="zm_popwin_rightbor"><img src="/tpl/user/images/popwin/popwin_avatar.gif"><a href="/usercp.php?c=avatar">设置形象照</a></li>
+	  
+	  <li style="padding-left:10px;padding-right:10px;">
+		<a href="/usercp.php?c=vip"><img title="VIP服务" src="/tpl/user/images/popwin/popwin_vip.png"></a>&nbsp;
+		<a href="/usercp.php?c=certify"><img title="诚信认证" src="/tpl/user/images/popwin/cid.png"></a>&nbsp;&nbsp;
+		<a href="/usercp.php?c=cond">修改择友条件</a>
+	  </li>
+
+	</ul>
+	<div style="clear:both;"></div>
+  </div>
+  <!--//zm_popwin_left End-->
+
+  <div class="zm_popwin_right">
+
+	  <div class="popwin-main" style="display:none;" id="popwin-main">
+		<div class="popwin-titlebar">
+		  <span class="popwin-title"></span>
+		  <div class="popwin-min" title="关闭消息"></div>
+		  <div class="clear"></div>
+		</div>
+		<div class="popwin-content" id="popwin-data">
+		
+		</div>
+	  </div>
+	  <!--/popwin_main End-->
+	  
+	  <input type="hidden" id="click_menu_value" value="" />
+	  <div class="popwin-menu">
+		<ul>
+		  <li onclick="obj_click_menu('msg', '2', '我的信件');">
+		  <div class="popwin-tx"></div><img src="/tpl/user/images/popwin/popwin_letter.gif">信件<span id="popwinmsg"><script>obj_loading_count('msg', 'popwinmsg');</script></span>
+		  </li>
+
+		  <li onclick="obj_click_menu('hi', '1', '我的招呼');">
+		  <div class="popwin-tx"></div><img src="/tpl/user/images/popwin/popwin_hi.gif">招呼<span id="popwinhi"><script>obj_loading_count('hi', 'popwinhi');</script></span>
+		  </li>
+
+		  <li onclick="obj_click_menu('gift', '3', '我的礼物');">
+		  <div class="popwin-tx"></div><img src="/tpl/user/images/popwin/popwin_gift.gif">礼物<span id="popwingift"><script>obj_loading_count('gift', 'popwingift');</script></span>
+		  </li>
+		  <li onclick="obj_click_menu('sysmsg', '1', '我的消息');">
+		  <div class="popwin-tx"></div><img src="/tpl/user/images/popwin/popwin_gg.gif">消息<span id="popwinsysmsg"><script>obj_loading_count('sysmsg', 'popwinsysmsg');</script></span>
+		  </li>
+		</ul>
+	  </div>
+	  <!--//popwin-menu End-->
+ 
+  </div>
+  <!--//zm_popwin_right End-->
+  <div style="clear"></div>
+</div>
+<script type='text/javascript'>
+$(function() {
+	$(".popwin-tx").addClass("block");
+	//最小化
+    $(".popwin-min").click(function() {
+        $(".popwin-main").slideUp("slow");
+    });
+});
+
+//扑捉区域
+function obj_click_menu(id, num, title) {
+	var _v = $("#click_menu_value").val();
+	//同一区域
+	if (_v == id) {
+		$(".popwin-title").html(title);
+		if ($("#popwin-main").css('display') == 'none') {
+			$(".popwin-main").slideDown("slow");
+			obj_popwin_data(id, num, "popwin-data");
+		}
+		else {
+			$(".popwin-main").slideUp("slow");
+		}
+	}
+	//不同区域
+	else {
+		if ($("#popwin-main").css('display') == 'block') {
+			$(".popwin-main").slideUp("slow");
+		}
+		$("#click_menu_value").val(id);
+		$(".popwin-title").html(title);
+		$(".popwin-main").slideDown("slow");
+		obj_popwin_data(id, num, "popwin-data");
+	}
+}
+
+//获取数据
+function obj_popwin_data(type, num, tips) {
+	$("#"+tips).html("<div style='text-align:center;padding:10px;color:#999999;'>loading</div>");
+	$.ajax({
+		type: "POST",
+		url: _ROOT_PATH + "usercp.php?c=popwin",
+		cache: false,
+		data: {a:type, num:num, r:get_rndnum(8)},
+		dataType: "json",
+		beforeSend: function(XMLHttpRequest) {
+			XMLHttpRequest.setRequestHeader("request_type","ajax");
+		},
+		success: function(data) {
+			var json = eval(data);
+			var result = json.result;
+			$("#"+tips).html(result);
+		},
+		error: function() {}
+	});
+}
+
+//imbox
+function obj_imbox() {
+	var tips = "popwin-data";
+	$.ajax({
+		type: "POST",
+		url: _ROOT_PATH + "usercp.php?c=popwin",
+		cache: false,
+		data: {r:get_rndnum(8)},
+		dataType: "json",
+		success: function(data) {
+			var json = eval(data);
+			var response = json.response;
+			var result = json.result;
+			var type = json.type;
+			//存在数据
+			if (response == 1) {
+				var title = '';
+				if (type == 'newvisit') {
+					title = '谁访问了我';
+				}
+				$(".popwin-title").html(title);
+				$("#"+tips).html(result);
+				if ($("#popwin-main").css('display') == 'block') {
+					$(".popwin-main").slideUp("slow");
+				}
+				$(".popwin-main").slideDown("slow");
+			}
+		},
+		error: function() {}
+	});
+}
+</script>
+
+<script type="text/javascript">
+jQuery(".drop").slide({ type:"menu", titCell:".cin", targetCell:".sub",effect:"slideDown",delayTime:300,triggerTime:0,defaultPlay:false,returnDefault:true});
+</script>
+<script type="text/javascript">
+//基本资料
+function checkbase() {
+	var t = "";
+	var v = "";
+
+	t = "marrystatus";
+	v = $("#"+t).val();
+	if(v=="") {
+		dmsg("请选择婚姻状况", t);
+		return false;
+	}
+
+	t = "height";
+	v = $("#"+t).val();
+	if(v=="") {
+		dmsg("请选择身高", t);
+		return false;
+	}
+
+	//所在地区
+	t = "provinceid";
+	v = $("#"+t).val();
+	if(v=="") {
+		dmsg("请选择所在地区", t);
+		return false;
+	}
+	//所在地区
+	t = "cityid";
+	v = $("#"+t).val();
+	if(v=="") {
+		dmsg("请选择所在地区", t);
+		return false;
+	}
+
+	//交友类型
+	t = "lovesort";
+	v = $("#"+t).val();
+	if(v=="") {
+		dmsg("请选择交友类别", t);
+		return false;
+	}
+
+	//月薪
+	t = "salary";
+	v = $("#"+t).val();
+	if(v=="") {
+		dmsg("请选择月薪收入", t);
+		return false;
+	}
+	
+	$('#myform').submit();
+	return true;
+}
+
+//内心独白
+function checkmonolog() {
+	var t = "";
+	var v = "";
+
+	//内心独白
+	t = 'content';
+	v = $('#'+t).val();
+	if (v == '') {
+		dmsg("内心独白不能为空", t);
+		return false;
+	}
+	else {
+		if (strQuantity(v)<20 || strQuantity(v)>1500) {
+			dmsg("内心独白字数必须在20~1500个字之间", t);
+			$('#'+t).focus();
+			return false;
+		}
+	}
+
+	$('#myform').submit();
+	return true;
+}
+$(function() {
+    $(window).scroll(function() {
+        var explorer = window.navigator.userAgent;
+        var scrollTops = 0;
+        if (explorer.indexOf("Chrome") >= 0 || explorer.indexOf("Safari") >= 0) {
+            var scrollTops = document.body.scrollTop;
+        } else {
+            scrollTops = document.documentElement.scrollTop;
+        }
+        if (parseInt(scrollTops) >= 70) {
+            $(".right_kj").slideDown("slow");
+        } else {
+            $(".right_kj").slideUp("slow");
+        }
+    });
+});
+
+//关注状态
+function obj_listen_status(uid, tipsid) {
+	if (uid > 0) {
+		$.ajax({
+			type: "POST",
+			url: _ROOT_PATH + "usercp.php?c=listen",
+			cache: false,
+			data: {a:"getlisten", halttype:"ajax", uid:uid, tipsid:tipsid, r:get_rndnum(8)},
+			dataType: "json",
+			success: function(data) {
+				var json = eval(data);
+				var flag = json.flag;
+				if (tipsid != '') {
+					if (flag == '1') {
+						$("#"+tipsid).html("<a href=\"###\" class=\"pcbtn-coff\" onclick=\"obj_action_listen('"+uid+"', 'cancel', '"+tipsid+"');\">取消关注</a>");
+					}
+					else {
+						$("#"+tipsid).html("<a href=\"###\" class=\"pcbtn-green\" onclick=\"obj_action_listen('"+uid+"', 'listen', '"+tipsid+"');\">+加关注</a>");
+					}
+				}
+			},
+			error: function() {
+
+			}
+		});
+	} 
+}
+
+//拉黑状态
+function obj_black_status(uid, tipsid) {
+	if (uid > 0) {
+		$.ajax({
+			type: "POST",
+			url: _ROOT_PATH + "usercp.php?c=listen",
+			cache: false,
+			data: {a:"getlisten", halttype:"ajax", uid:uid, tipsid:tipsid, r:get_rndnum(8)},
+			dataType: "json",
+			success: function(data) {
+				var json = eval(data);
+				var flag = json.flag;
+				if (tipsid != '') {
+					if (flag == '2') {
+						//已拉黑
+						$("#"+tipsid).html("<a href=\"###\" class=\"pcbtn-green\" onclick=\"obj_action_listen('"+uid+"', 'listen', '"+tipsid+"');\">+加关注</a>");
+					}
+					else {
+						//未拉黑
+						$("#"+tipsid).html("<a href=\"###\" class=\"pcbtn-coff\" onclick=\"obj_action_listen('"+uid+"', 'black', '"+tipsid+"');\">拉黑名单</a>");
+					}
+				}
+			},
+			error: function() {
+
+			}
+		});
+	} 
+}
+
+//操作好友 加关注、拉黑、取消
+function obj_action_listen (uid, action, tipsid) {
+	if (uid > 0) {
+		$.ajax({
+			type: "POST",
+			url: _ROOT_PATH + "usercp.php?c=listen",
+			cache: false,
+			data: {a:action, halttype:"ajax", fuid:uid, tipsid:tipsid, r:get_rndnum(8)},
+			dataType: "json",
+			success: function(data) {
+				var json = eval(data);
+				var type = json.type;
+				var flag = json.flag;
+				var error = json.error;
+				if (tipsid != '') {
+					//加关注
+					if (type == 'listen') {
+						if (error.length==0) {
+							if (flag == '1') {
+								$("#"+tipsid).html("<a href=\"###\" class=\"pcbtn-coff\" onclick=\"obj_action_listen('"+uid+"', 'cancel', '"+tipsid+"');\">取消关注</a>");
+							}
+						}
+						else {
+							alert(error);
+						}
+					}
+					//取消关注
+					if (type == 'cancel') {
+						if (error.length==0) {
+							if (flag == '1') {
+								$("#"+tipsid).html("<a href=\"###\" class=\"pcbtn-green\" onclick=\"obj_action_listen('"+uid+"', 'listen', '"+tipsid+"');\">+加关注</a>");
+							}
+						}
+						else {
+							alert(error);
+						}
+					}
+					//拉黑名单
+					if (type == 'black') {
+						if (error.length==0) {
+							if (flag == '1') {
+								$("#"+tipsid).html("<a href=\"###\" class=\"pcbtn-green\" onclick=\"obj_action_listen('"+uid+"', 'listen', '"+tipsid+"');\">+加关注</a>");
+							}
+						}
+						else {
+							alert(error);
+						}
+					}
+
+				}
+			},
+			error: function() {
+
+			}
+		});
+	}
+}
+
+//发表心情
+function obj_public_mood(content_id) {
+	var content = $("#"+content_id).val();
+	//心情内容
+	if (content == '' || content == '记录每一天的心情...') {
+		$.dialog({
+			lock:true,
+			title: '错误提示',
+			content: '请填写心情内容', 
+			icon: 'error',
+			button: [ 
+				{
+					name: '确定'
+				}
+			]
+		});
+		return false;
+	}
+	if (strQuantity(content) > 500) {
+		$.dialog({
+			lock:true,
+			title: '错误提示',
+			content: '心情内容不能大于500个字', 
+			icon: 'error',
+			button: [ 
+				{
+					name: '确定'
+				}
+			]
+		});
+		return false;
+	}
+
+	//发表心情
+	$.ajax({
+		type: "POST",
+		url: _ROOT_PATH + "usercp.php?c=weibo",
+		cache: false,
+		data: {a:"saveweibo", content:content, r:get_rndnum(8)},
+		dataType: "json",
+		success: function(data) {
+			var json = eval(data);
+			var response = json.response;
+			var msg = json.msg;
+			if (response == '1') {
+				var tips = "";
+				if (msg.length > 0) {
+					tips = msg;
+				}
+				else {
+					tips = "发表成功";
+				}
+				$.dialog({
+					lock:true,
+					title: '成功提示',
+					content: tips, 
+					icon: 'succeed',
+					button: [ 
+						{
+							name: '确定',
+							callback: function () {
+								window.top.location.reload();
+							}
+						}
+					]
+				});
+			}
+			else {
+				var tips = "";
+				if (msg.length > 0) {
+					tips = msg;
+				}
+				else {
+					tips = "发表失败";
+				}
+				$.dialog.tips(tips, 3);
+			}
+		},
+		error: function() {
+
+		}
+	});
+
+}
+//心情文本框
+function obj_del_wbcontent(content_id) {
+	var content = $("#"+content_id).val();
+	if (content == '记录每一天的心情...') {
+		$("#"+content_id).val("");
+	}
+}
+function obj_attr_wbcontent(content_id) {
+	var content = $("#"+content_id).val();
+	if (content == '') {
+		$("#title").val("记录每一天的心情...");
+	}
+}
+function obj_cancel_wbcontent(content_id) {
+	var content = $("#"+content_id).val();
+	if (content != '记录每一天的心情...') {
+		$("#"+content_id).val("记录每一天的心情...");
+	}
+}
+</script>
+{% endblock %}

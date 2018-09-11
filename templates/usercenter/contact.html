@@ -1,0 +1,878 @@
+<!doctype html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if gt IE 8]><![endif]-->
+<html class="no-js" lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="author" content="OEdev" />
+<meta name="generator" content="OElove" />
+<title>修改资料-OElove V5.0免费版演示-Powered By OElove</title>
+<link href="/tpl/static/varpop/css/oe_varpop.css" rel="stylesheet" />
+<link href="/tpl/user/css/css.css" rel="stylesheet" />
+<script type='text/javascript'>
+var _ROOT_PATH = "/";
+</script>
+<script type="text/javascript" src='/tpl/static/js/jquery.min.js'></script>
+<script type="text/javascript" src='/tpl/static/js/artdialog/jquery.artDialog.source.js?skin=default'></script>
+<script type="text/javascript" src='/tpl/static/js/artdialog/plugins/iframeTools.js'></script>
+<script type="text/javascript" src='/tpl/static/js/public.js'></script>
+<script type="text/javascript" src='/tpl/static/js/ajax.js'></script>
+<script type="text/javascript" src='/tpl/static/js/artbox.js'></script>
+<script type="text/javascript" src='/tpl/static/js/WdatePicker.js'></script>
+<script type="text/javascript" src="/tpl/static/varpop/oe_varpop.js"></script>
+<script type="text/javascript" src="/tpl/templets/default/js/jquery.SuperSlide.2.1.1.js"></script>
+<!--[if lt IE 7]>
+<script type='text/javascript' src='/tpl/static/js/DD_belatedPNG-min.js'></script>
+<script>
+DD_belatedPNG.fix('.user_logo, .shadow');
+</script>
+<![endif]-->
+<script type='text/javascript'>
+$(function() {
+    $(window).scroll(function() {
+        var explorer = window.navigator.userAgent;
+        var scrollTops = 0;
+        if (explorer.indexOf("Chrome") >= 0 || explorer.indexOf("Safari") >= 0) {
+            var scrollTops = document.body.scrollTop;
+        } else {
+            scrollTops = document.documentElement.scrollTop;
+        }
+        if (parseInt(scrollTops) >= 70) {
+            $(".right_kj").slideDown("slow");
+        } else {
+            $(".right_kj").slideUp("slow");
+        }
+    });
+});
+
+//关注状态
+function obj_listen_status(uid, tipsid) {
+	if (uid > 0) {
+		$.ajax({
+			type: "POST",
+			url: _ROOT_PATH + "usercp.php?c=listen",
+			cache: false,
+			data: {a:"getlisten", halttype:"ajax", uid:uid, tipsid:tipsid, r:get_rndnum(8)},
+			dataType: "json",
+			success: function(data) {
+				var json = eval(data);
+				var flag = json.flag;
+				if (tipsid != '') {
+					if (flag == '1') {
+						$("#"+tipsid).html("<a href=\"###\" class=\"pcbtn-coff\" onclick=\"obj_action_listen('"+uid+"', 'cancel', '"+tipsid+"');\">取消关注</a>");
+					}
+					else {
+						$("#"+tipsid).html("<a href=\"###\" class=\"pcbtn-green\" onclick=\"obj_action_listen('"+uid+"', 'listen', '"+tipsid+"');\">+加关注</a>");
+					}
+				}
+			},
+			error: function() {
+
+			}
+		});
+	} 
+}
+
+//拉黑状态
+function obj_black_status(uid, tipsid) {
+	if (uid > 0) {
+		$.ajax({
+			type: "POST",
+			url: _ROOT_PATH + "usercp.php?c=listen",
+			cache: false,
+			data: {a:"getlisten", halttype:"ajax", uid:uid, tipsid:tipsid, r:get_rndnum(8)},
+			dataType: "json",
+			success: function(data) {
+				var json = eval(data);
+				var flag = json.flag;
+				if (tipsid != '') {
+					if (flag == '2') {
+						//已拉黑
+						$("#"+tipsid).html("<a href=\"###\" class=\"pcbtn-green\" onclick=\"obj_action_listen('"+uid+"', 'listen', '"+tipsid+"');\">+加关注</a>");
+					}
+					else {
+						//未拉黑
+						$("#"+tipsid).html("<a href=\"###\" class=\"pcbtn-coff\" onclick=\"obj_action_listen('"+uid+"', 'black', '"+tipsid+"');\">拉黑名单</a>");
+					}
+				}
+			},
+			error: function() {
+
+			}
+		});
+	} 
+}
+
+//操作好友 加关注、拉黑、取消
+function obj_action_listen (uid, action, tipsid) {
+	if (uid > 0) {
+		$.ajax({
+			type: "POST",
+			url: _ROOT_PATH + "usercp.php?c=listen",
+			cache: false,
+			data: {a:action, halttype:"ajax", fuid:uid, tipsid:tipsid, r:get_rndnum(8)},
+			dataType: "json",
+			success: function(data) {
+				var json = eval(data);
+				var type = json.type;
+				var flag = json.flag;
+				var error = json.error;
+				if (tipsid != '') {
+					//加关注
+					if (type == 'listen') {
+						if (error.length==0) {
+							if (flag == '1') {
+								$("#"+tipsid).html("<a href=\"###\" class=\"pcbtn-coff\" onclick=\"obj_action_listen('"+uid+"', 'cancel', '"+tipsid+"');\">取消关注</a>");
+							}
+						}
+						else {
+							alert(error);
+						}
+					}
+					//取消关注
+					if (type == 'cancel') {
+						if (error.length==0) {
+							if (flag == '1') {
+								$("#"+tipsid).html("<a href=\"###\" class=\"pcbtn-green\" onclick=\"obj_action_listen('"+uid+"', 'listen', '"+tipsid+"');\">+加关注</a>");
+							}
+						}
+						else {
+							alert(error);
+						}
+					}
+					//拉黑名单
+					if (type == 'black') {
+						if (error.length==0) {
+							if (flag == '1') {
+								$("#"+tipsid).html("<a href=\"###\" class=\"pcbtn-green\" onclick=\"obj_action_listen('"+uid+"', 'listen', '"+tipsid+"');\">+加关注</a>");
+							}
+						}
+						else {
+							alert(error);
+						}
+					}
+
+				}
+			},
+			error: function() {
+
+			}
+		});
+	}
+}
+
+//发表心情
+function obj_public_mood(content_id) {
+	var content = $("#"+content_id).val();
+	//心情内容
+	if (content == '' || content == '记录每一天的心情...') {
+		$.dialog({
+			lock:true,
+			title: '错误提示',
+			content: '请填写心情内容', 
+			icon: 'error',
+			button: [ 
+				{
+					name: '确定'
+				}
+			]
+		});
+		return false;
+	}
+	if (strQuantity(content) > 500) {
+		$.dialog({
+			lock:true,
+			title: '错误提示',
+			content: '心情内容不能大于500个字', 
+			icon: 'error',
+			button: [ 
+				{
+					name: '确定'
+				}
+			]
+		});
+		return false;
+	}
+
+	//发表心情
+	$.ajax({
+		type: "POST",
+		url: _ROOT_PATH + "usercp.php?c=weibo",
+		cache: false,
+		data: {a:"saveweibo", content:content, r:get_rndnum(8)},
+		dataType: "json",
+		success: function(data) {
+			var json = eval(data);
+			var response = json.response;
+			var msg = json.msg;
+			if (response == '1') {
+				var tips = "";
+				if (msg.length > 0) {
+					tips = msg;
+				}
+				else {
+					tips = "发表成功";
+				}
+				$.dialog({
+					lock:true,
+					title: '成功提示',
+					content: tips, 
+					icon: 'succeed',
+					button: [ 
+						{
+							name: '确定',
+							callback: function () {
+								window.top.location.reload();
+							}
+						}
+					]
+				});
+			}
+			else {
+				var tips = "";
+				if (msg.length > 0) {
+					tips = msg;
+				}
+				else {
+					tips = "发表失败";
+				}
+				$.dialog.tips(tips, 3);
+			}
+		},
+		error: function() {
+
+		}
+	});
+
+}
+//心情文本框
+function obj_del_wbcontent(content_id) {
+	var content = $("#"+content_id).val();
+	if (content == '记录每一天的心情...') {
+		$("#"+content_id).val("");
+	}
+}
+function obj_attr_wbcontent(content_id) {
+	var content = $("#"+content_id).val();
+	if (content == '') {
+		$("#title").val("记录每一天的心情...");
+	}
+}
+function obj_cancel_wbcontent(content_id) {
+	var content = $("#"+content_id).val();
+	if (content != '记录每一天的心情...') {
+		$("#"+content_id).val("记录每一天的心情...");
+	}
+}
+</script>
+</head>
+<body>
+<link href="/tpl/user/default/css.css" rel="stylesheet" />
+<div class="nav0">
+<div class="oe_top">
+  <div class="oe_topcon">
+    <div class="left">欢迎来到OElove V5.0免费版演示</div>
+    <div class="right drop">
+      <div class="login">
+                欢迎您：
+                <img src='/data/attachment/upload/201110/22/f2fde8e7d8aa2a10.gif' border='0' class='' />002(ID:164084) <span>普通会员</span>
+                        <a href="/usercp.php">会员中心</a> | <a href="/index.php?c=home&uid=164084">我的主页</a> | <a href="/index.php?c=passport&a=logout">退出登录</a> 
+                      </div>
+      
+      <dl class="cin">
+        <dt><i></i>手机版</dt>
+        <dd class="sub">
+                    <img src="/index.php?c=scan&a=getqr&size=4&url=http%3A%2F%2Fjiaoyou.phpcoo.com%2Fwap.php&r=1535626573" />
+          <p>扫一扫 手机交友</p>
+        </dd>
+      </dl>
+      
+    </div>
+    <div class="clear"></div>
+  </div>
+</div>
+<div class="oe_nav">
+  <div class="oe_navcon">
+    <div class="logo">
+      <a href="/index.php"><img class="logo" src="/data/attachment/upload/201704/26/82b1813f4352fb91.png"  alt="OElove V5.0免费版演示" /></a><img class="line" src="/tpl/templets/default/images/line.png" alt="" />
+      <div class="clear"></div>
+    </div>
+    <div class="menu">
+      <ul>
+        <li><a href="/">首页</a></li>
+                        <li><a href="/index.php?c=user&s_sex=2">会员</a></li>
+                        <li><a href="/index.php?c=party">活动</a></li>
+        <li><a href="/index.php?c=diary">日记</a></li>
+        <li><a href="/usercp.php?c=weibo">微心情</a></li>
+        <li><a href="/index.php?c=case">幸福案例</a></li>
+        <li><a href="/index.php?c=safety">防骗中心</a></li>
+      </ul>
+    </div>
+    <div class="clear"></div>
+  </div>
+</div>
+</div>
+<div style="height:140px;"></div>
+
+
+
+
+
+<div class="user_main">
+  <div class="oe_bn"><span></span><a href="/usercp.php">会员中心</a> &gt;&gt; 我的资料</div>
+  <div class="user_main_left">
+  <div class="oe_index_uL_top">
+    <div class="oe_index_uL_head">
+	  <dl>
+	    <dt>
+                <a href="/usercp.php?c=avatar"><img src="/tpl/static/images/gender_1.gif" title="设置头像" /></a>
+              
+       
+      
+      
+      </dt>
+      <dd>
+        <h2><img src='/data/attachment/upload/201110/22/f2fde8e7d8aa2a10.gif' border='0' class='' />002</h2>
+        <h3><a href="/index.php?c=home&uid=164084" target="_blank">查看我的主页</a></h3>
+      </dd>
+      <div class="clear"></div>
+	  </dl>
+	  <div class="clear"></div>
+
+    </div>
+    <div class="oe_uL_rz">
+      <div class="oe_uL_rz_name">
+	  征友状态：
+	  	  进行中
+	  	  <a href="/usercp.php?c=account&a=setstatus">修改</a>
+	  </div>
+      <div class="oe_uL_rz_con">
+	    <img src="/tpl/user/images/a1_h.png" title="身份证未认证" />
+		<img src="/tpl/user/images/a2_h.png" title="邮箱未认证" />
+		<img src="/tpl/user/images/a3_h.png" title="视频未认证" />
+	   <a href="/usercp.php?c=certify">诚信认证</a>
+	  </div>
+    </div>
+    <div class="oe_index_uL_jb">
+      <ul>
+        <li><span><a href="/usercp.php?c=money">0</a></span>我的金币</li>
+        <li><span><a href="/usercp.php?c=points">10</a></span>我的积分</li>
+        <div class="clear"></div>
+      </ul>
+    </div>
+    <div class="mu_profile">
+      <a href="/usercp.php?c=payment" class="a_1">在线充值</a>
+      <a href="/usercp.php?c=profile" class="a_2">完善资料</a>
+    </div>
+  </div>
+  <div class="oe_hr"></div>
+  <div class="u_menu">
+    <ul>
+      <li> <i class="ico_1"></i><a href="/usercp.php?c=vip">会员服务</a></li>
+
+	  	  
+      <li>
+        <i class="ico_2"></i><a href="/usercp.php?c=message">私信</a> 
+		      </li>
+      <li>
+        <i class="ico_3"></i><a href="/usercp.php?c=gift">礼物</a>
+		      </li>
+
+      <li><i class="ico_4"></i><a href="/usercp.php?c=listen">关注</a></li>
+      <li><i class="ico_5"></i><a href="/usercp.php?c=visitme">谁看过我</a></li>
+      <li><i class="ico_6"></i><a href="/usercp.php?c=weibo">心情微博</a></li>
+      <li><i class="ico_7"></i><a href="/usercp.php?c=diary">日记</a></li>
+      <li><i class="ico_10"></i><a href="/usercp.php?c=myparty">我报名的活动</a></li>
+      <li><i class="ico_8"></i><a href="/usercp.php?c=extend&a=connect">其它</a></li>
+    </ul>
+  </div>
+  
+  <div class="u_photo">
+    <dl>
+      <dt>
+        <a href="/usercp.php?c=album&a=upload"><span></span></a>
+      </dt>
+      <dd>
+        <a href="/usercp.php?c=album&a=upload"><b>上传美照</b><br>获取更多关注</a>
+      </dd>
+      <div class="clear"></div>
+    </dl>
+  </div>
+  </div>
+  <!--//user_main_left End-->
+
+  <div class="main_right">
+	  <div class="oe_tab_nv">
+	    <ul>
+		  <li class="tab_item"><a href="/usercp.php?c=profile">基本资料</a></li>
+		  <li class="tab_item"><a href="/usercp.php?c=profile&a=more">详细资料</a></li>
+		  <li class="tab_item"><a href="/usercp.php?c=profile&a=monolog">内心独白</a></li>
+		  <li class="tab_item current"><a href="/usercp.php?c=profile&a=contact">联系资料</a></li>
+		  	    </ul>
+	  </div>
+	<div class="div_smallnav_content_hover basicdata">
+	  
+	  	  
+	  
+	  
+	   
+	  <!-- 联系资料 Begin-->
+	  <form name="myform" id="myform" action="/usercp.php?c=profile" method="post">
+	  <input type='hidden' name='a' id='a' value='savecontact' />
+	  <table cellpadding='0' cellspacing='0' border='0' width="98%" class="user-table table-margin lh35">
+		  <tr>
+			<td colspan="2" style="padding-bottom:10px;"><div class="item_title" style="width:100%"><p>联系方式</p><span class="shadow"></span></div></td>
+		  </tr>
+		  <!-- 查看权限 -->
+		  <tr style="display:;">
+			<td class='lblock' width='25%'>查看权限 <span class='f_red'></span></td>
+			<td class='rblock' width='75%'><input type="radio" name="privacy" id="privacy" value="1" />任何人可见&nbsp;&nbsp;<input type="radio" name="privacy" id="privacy" value="4" />保密&nbsp;&nbsp; <span id='dprivacy' class='f_red'></span></td>
+		  </tr>
+		  <!-- 手机号码 -->
+		  <tr>
+			<td class='lblock'><font color='red'>*</font>手机号 <span class='f_red'></span></td>
+			<td class='rblock' colspan="3">
+			<input type='hidden' name='mobilerz' id='mobilerz' value='0' />
+			<input type="text" name="mobile" id="mobile" value="" maxlength='11' class="input-150"  onblur="ajax_usermobile('mobile', 'tips_mobile');" /> 
+			
+						<span id='dmobile' class='f_red'></span>
+			<span id="tips_mobile">(手机号码和QQ号码至少填写一项)</span>
+			</td>
+		  </tr>
+		  <!-- QQ -->
+		  <tr>
+			<td class='lblock'><font color='red'>*</font>QQ号 <span class='f_red'></span></td>
+			<td class='rblock' colspan="3">
+
+			<input type="text" name="qq" id="qq" value="" class="input-150" maxlength='11'   onblur="ajax_userqq('qq', 'tips_qq');" /> 
+						<span id='dqq' class='f_red'></span>  
+			<span id="tips_qq">(手机号码和QQ号码至少填写一项)</span>
+			
+			</td>
+		  </tr>
+		  <!-- 联系电话 -->
+		  <tr>
+			<td class='lblock'>电话 <span class='f_red'></span></td>
+			<td class='rblock' colspan="3"><input type="text" name="telephone" id="telephone" value="" class="input-100" /> <span id='dtelephone' class='f_red'></span></td>
+		  </tr>
+
+		  <!--  MSN -->
+		  <tr>
+			<td class='lblock'>微信 <span class='f_red'></span></td>
+			<td class='rblock' colspan="3"><input type="text" name="msn" id="msn" value="" class="input-txt" /> <span id='dmsn' class='f_red'></span></td>
+		  </tr>
+		  <!-- 个人博客/微博 -->
+		  <tr>
+			<td class='lblock'>个人博客/微博 <span class='f_red'></span></td>
+			<td class='rblock' colspan="3"><input type="text" name="homepage" id="homepage" value="" class="input-txt" /> <span id='dhomepage' class='f_red'></span></td>
+		  </tr>
+		  <!-- 联系地址 -->
+		  <tr>
+			<td class='lblock'>联系地址 <span class='f_red'></span></td>
+			<td class='rblock' colspan="3"><input type="text" name="address" id="address" value="" class="input-txt" /> <span id='daddress' class='f_red'></span> </td>
+		  </tr>
+		  <!-- 邮政编码 -->
+		  <tr>
+			<td class='lblock'>邮政编码 <span class='f_red'></span></td>
+			<td class='rblock' colspan="3"><input type="text" name="zipcode" id="zipcode" value="" class="input-s" /> <span id='dzipcode' class='f_red'></span> </td>
+		  </tr>
+		  <!-- 提交按钮 -->
+		  <tr>
+			<td class='lblock'></td>
+			<td class='rblock' height="45">
+			<input type="button" name="btn_save" value="提交保存" onclick="return checkcontact();" class="button-red" />
+			</td>
+		  </tr>
+	  </table>
+	  </form>
+
+		<script language="javascript">
+		function checkcontact(){
+			var mobile = $('#mobile').val();
+			var qq = $('#qq').val();
+
+			if (mobile == '' && qq == '') {
+				//alert('手机号码或者QQ至少填写一项');
+				$.dialog.tips("手机号码或者QQ至少填写一项", 3);
+				return false;
+			}
+			else {
+				if (mobile != '') {
+										if (!isMobile(mobile)) {
+						//alert('手机号码不正确！');
+						$.dialog.tips("手机号码不正确！", 3);
+						return false;
+					}
+									}
+				if (qq != '') {
+					if (!isQQ(qq)) {
+						//alert('QQ号码格式不正确，请填写5-11位数字');
+						$.dialog.tips("QQ号码格式不正确，请填写5-11位数字", 3);
+						return false;
+					}
+				}
+			}
+			$('#myform').submit();
+			return true;
+		}
+		</script>
+	  <!-- 联系资料 End-->
+	  
+
+	</div>
+	<div class="clear"></div>
+	<!--//div_smallnav_content_hover End-->
+  </div>
+  <div class="clear"></div>
+  <!--//main_right End-->
+
+  <div style="margin: 30px;"></div>
+  <!--//right_kj End-->
+  
+</div>
+<!--//user_main End-->
+
+<div class="user_footer" style="padding-bottom:30px;">
+  红娘客服　　24 小时服务热线 020-12345678<br />
+<p>
+	婚恋交友版权所有 &copy; 2010-<span id="footer-copyright-year">2012 OElove</span> 
+</p>
+<p>
+	<span><a href="http://mb.oephp.com/" target="_blank">婚恋交<span id="__kindeditor_bookmark_start_2__"></span>友网站模板</a><span>&nbsp;</span><a href="http://mb.oephp.com/" target="_blank">PHP同城交友模板</a><span>&nbsp;</span><a href="http://mb.oephp.com/" target="_blank">微信手机交友模板<span id="__kindeditor_bookmark_start_2__"></span></a></span>
+</p>
+</div>
+<!--//user_footer End-->
+<script type='text/javascript'>
+//新信息
+function obj_loading_count(type, tipsid) {
+	$.ajax({
+		type: "POST",
+		url: _ROOT_PATH + "usercp.php?c=popwin&a=count",
+		cache: false,
+		data: {type:type, r:get_rndnum(8)},
+		dataType: "json",
+		beforeSend: function(XMLHttpRequest) {
+			XMLHttpRequest.setRequestHeader("request_type","ajax");
+		},
+		success: function(data) {
+			var json = eval(data);
+			var num = json.num;
+			if (num > 0) {
+				var html = "";
+				html = html+"<font style='color:#51545B;'>(";
+				if (num > 99) {
+					html = html+"99";
+				}
+				else {
+					html = html+num;
+				}
+				html = html+")</font>";
+				$("#"+tipsid).html(html);
+			}
+		},
+		error: function() {}
+	});
+}
+</script>
+<style>
+.popwin-box{
+  position:fixed;
+  bottom:0px; 
+  right:0px;
+  background:url("/tpl/user/images/popwin/popwin_bg.jpg") repeat-x bottom;
+  width:100%;
+  z-index:999;
+}
+.popwin-main {
+	width:330px; 
+	border:1px solid #f0f0f0; 
+	margin-bottom:1px;
+	bottom: 29px;
+	position: absolute;
+	z-index: 9;
+	background:#ffffff;
+
+}
+.popwin-titlebar{background:#F0EDEB; padding:8px;height:20px;}
+.popwin-title{ color: #C70067;display: inline;float: left;font-family: Microsoft YaHei,SimHei;font-size: 14px;line-height: 20px;}
+.popwin-min{float:right; width:13px; height:10px; border-top:3px solid #D83473; line-height:20px; cursor:pointer;margin-top:5px;}
+
+.popwin-menu{
+	width:330px;height:30px;
+	background:url("/tpl/user/images/popwin/popwin_bg.jpg") repeat-x bottom;
+}
+.popwin-menu li{
+	float:left; width:80px; text-align:center;padding:7px 0 0 0; 
+	border-left:1px solid #ddd; position:relative;
+}   
+.popwin-menu li img {vertical-align:middle;padding-bottom:2px;}
+.popwin-menu li:hover{cursor:pointer;}
+.popwin-menu .popwin-tx{
+	width: 8px; height: 8px; 
+	background: url(/tpl/user/images/icon.png) repeat scroll -100px -275px transparent; 
+	position:absolute; top:9px; left:3px; display:none;
+}
+.popwin-menu span{padding-top:5px;}
+
+.popwin-content {
+	width:310px;padding:10px;background:#ffffff;
+}
+.popwin-content .popwin-nothing{
+	padding:20px;line-height:20px;text-align:center;color:#666666;
+}
+
+
+
+.zm_popwin_left {
+	float:left;width:50%;height:30px;color:#666666;
+	position:fixed;
+	bottom:0px; 
+}
+.zm_popwin_left ul li {
+	float:left;line-height:30px;height:30px;
+}
+.zm_popwin_left ul li img {
+	vertical-align:middle;
+}
+.zm_popwin_left .zm_popwin_rightbor {border-right:1px solid #ccc;}
+
+.zm_popwin_right {
+	float:right;width:330px;
+}
+</style>
+<div class="popwin-box" style="display:none;">
+  
+  <div class="zm_popwin_left">
+    <ul>
+	  <li style="padding-left:20px;padding-right:10px;" class="zm_popwin_rightbor"><a href="/usercp.php">会员中心</a></li>
+	  <li style="padding-left:10px;padding-right:10px;" class="zm_popwin_rightbor"><img src="/tpl/user/images/popwin/popwin_avatar.gif"><a href="/usercp.php?c=avatar">设置形象照</a></li>
+	  
+	  <li style="padding-left:10px;padding-right:10px;">
+		<a href="/usercp.php?c=vip"><img title="VIP服务" src="/tpl/user/images/popwin/popwin_vip.png"></a>&nbsp;
+		<a href="/usercp.php?c=certify"><img title="诚信认证" src="/tpl/user/images/popwin/cid.png"></a>&nbsp;&nbsp;
+		<a href="/usercp.php?c=cond">修改择友条件</a>
+	  </li>
+
+	</ul>
+	<div style="clear:both;"></div>
+  </div>
+  <!--//zm_popwin_left End-->
+
+  <div class="zm_popwin_right">
+
+	  <div class="popwin-main" style="display:none;" id="popwin-main">
+		<div class="popwin-titlebar">
+		  <span class="popwin-title"></span>
+		  <div class="popwin-min" title="关闭消息"></div>
+		  <div class="clear"></div>
+		</div>
+		<div class="popwin-content" id="popwin-data">
+		
+		</div>
+	  </div>
+	  <!--/popwin_main End-->
+	  
+	  <input type="hidden" id="click_menu_value" value="" />
+	  <div class="popwin-menu">
+		<ul>
+		  <li onclick="obj_click_menu('msg', '2', '我的信件');">
+		  <div class="popwin-tx"></div><img src="/tpl/user/images/popwin/popwin_letter.gif">信件<span id="popwinmsg"><script>obj_loading_count('msg', 'popwinmsg');</script></span>
+		  </li>
+
+		  <li onclick="obj_click_menu('hi', '1', '我的招呼');">
+		  <div class="popwin-tx"></div><img src="/tpl/user/images/popwin/popwin_hi.gif">招呼<span id="popwinhi"><script>obj_loading_count('hi', 'popwinhi');</script></span>
+		  </li>
+
+		  <li onclick="obj_click_menu('gift', '3', '我的礼物');">
+		  <div class="popwin-tx"></div><img src="/tpl/user/images/popwin/popwin_gift.gif">礼物<span id="popwingift"><script>obj_loading_count('gift', 'popwingift');</script></span>
+		  </li>
+		  <li onclick="obj_click_menu('sysmsg', '1', '我的消息');">
+		  <div class="popwin-tx"></div><img src="/tpl/user/images/popwin/popwin_gg.gif">消息<span id="popwinsysmsg"><script>obj_loading_count('sysmsg', 'popwinsysmsg');</script></span>
+		  </li>
+		</ul>
+	  </div>
+	  <!--//popwin-menu End-->
+ 
+  </div>
+  <!--//zm_popwin_right End-->
+  <div style="clear"></div>
+
+
+
+</div>
+<script type='text/javascript'>
+$(function() {
+	$(".popwin-tx").addClass("block");
+	//最小化
+    $(".popwin-min").click(function() {
+        $(".popwin-main").slideUp("slow");
+    });
+});
+
+//扑捉区域
+function obj_click_menu(id, num, title) {
+	var _v = $("#click_menu_value").val();
+	//同一区域
+	if (_v == id) {
+		$(".popwin-title").html(title);
+		if ($("#popwin-main").css('display') == 'none') {
+			$(".popwin-main").slideDown("slow");
+			obj_popwin_data(id, num, "popwin-data");
+		}
+		else {
+			$(".popwin-main").slideUp("slow");
+		}
+	}
+	//不同区域
+	else {
+		if ($("#popwin-main").css('display') == 'block') {
+			$(".popwin-main").slideUp("slow");
+		}
+		$("#click_menu_value").val(id);
+		$(".popwin-title").html(title);
+		$(".popwin-main").slideDown("slow");
+		obj_popwin_data(id, num, "popwin-data");
+	}
+}
+
+//获取数据
+function obj_popwin_data(type, num, tips) {
+	$("#"+tips).html("<div style='text-align:center;padding:10px;color:#999999;'>loading</div>");
+	$.ajax({
+		type: "POST",
+		url: _ROOT_PATH + "usercp.php?c=popwin",
+		cache: false,
+		data: {a:type, num:num, r:get_rndnum(8)},
+		dataType: "json",
+		beforeSend: function(XMLHttpRequest) {
+			XMLHttpRequest.setRequestHeader("request_type","ajax");
+		},
+		success: function(data) {
+			var json = eval(data);
+			var result = json.result;
+			$("#"+tips).html(result);
+		},
+		error: function() {}
+	});
+}
+
+//imbox
+function obj_imbox() {
+	var tips = "popwin-data";
+	$.ajax({
+		type: "POST",
+		url: _ROOT_PATH + "usercp.php?c=popwin",
+		cache: false,
+		data: {r:get_rndnum(8)},
+		dataType: "json",
+		success: function(data) {
+			var json = eval(data);
+			var response = json.response;
+			var result = json.result;
+			var type = json.type;
+			//存在数据
+			if (response == 1) {
+				var title = '';
+				if (type == 'newvisit') {
+					title = '谁访问了我';
+				}
+				$(".popwin-title").html(title);
+				$("#"+tips).html(result);
+				if ($("#popwin-main").css('display') == 'block') {
+					$(".popwin-main").slideUp("slow");
+				}
+				$(".popwin-main").slideDown("slow");
+			}
+		},
+		error: function() {}
+	});
+}
+</script>
+
+<script type="text/javascript">
+jQuery(".drop").slide({ type:"menu", titCell:".cin", targetCell:".sub",effect:"slideDown",delayTime:300,triggerTime:0,defaultPlay:false,returnDefault:true});
+</script>
+</body>
+</html>
+<script type="text/javascript">
+//基本资料
+function checkbase() {
+	var t = "";
+	var v = "";
+
+	t = "marrystatus";
+	v = $("#"+t).val();
+	if(v=="") {
+		dmsg("请选择婚姻状况", t);
+		return false;
+	}
+
+	t = "height";
+	v = $("#"+t).val();
+	if(v=="") {
+		dmsg("请选择身高", t);
+		return false;
+	}
+
+	//所在地区
+	t = "provinceid";
+	v = $("#"+t).val();
+	if(v=="") {
+		dmsg("请选择所在地区", t);
+		return false;
+	}
+	//所在地区
+	t = "cityid";
+	v = $("#"+t).val();
+	if(v=="") {
+		dmsg("请选择所在地区", t);
+		return false;
+	}
+
+	//交友类型
+	t = "lovesort";
+	v = $("#"+t).val();
+	if(v=="") {
+		dmsg("请选择交友类别", t);
+		return false;
+	}
+
+	//月薪
+	t = "salary";
+	v = $("#"+t).val();
+	if(v=="") {
+		dmsg("请选择月薪收入", t);
+		return false;
+	}
+	
+	$('#myform').submit();
+	return true;
+}
+
+//内心独白
+function checkmonolog() {
+	var t = "";
+	var v = "";
+
+	//内心独白
+	t = 'content';
+	v = $('#'+t).val();
+	if (v == '') {
+		dmsg("内心独白不能为空", t);
+		return false;
+	}
+	else {
+		if (strQuantity(v)<20 || strQuantity(v)>1500) {
+			dmsg("内心独白字数必须在20~1500个字之间", t);
+			$('#'+t).focus();
+			return false;
+		}
+	}
+
+	$('#myform').submit();
+	return true;
+}
+
+
+</script>

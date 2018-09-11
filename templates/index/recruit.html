@@ -1,0 +1,106 @@
+﻿{% extends '../base.htm' %}
+
+{% block content %}
+<div class="oe_story_detail">
+
+  <div class="left">
+    <h1>加入我们</h1>
+    <div class="text">
+      {{ companyinfo.recruit|safe }}
+    </div>
+    
+    <div class="oe_comment">
+      <!--<input type="hidden" name="storyid" id="storyid" value="7" />
+      <h2>
+        网友祝福
+                <span class="cursor" f="pop2_jdlogin">发表祝福</span>
+              </h2>
+      <div id="comm_json_data">
+
+      </div>
+    
+      <div class="allmore_btn" f="but_get_commpage" data-page="" style="display:none; padding-bottom:20px;">
+        <span>加载更多</span> <br>
+        <label style="display:none;"><img src="https://e.oephp.com/tpl/templets/v5/images/page_loading.gif" /></label>
+      </div>-->
+    </div>
+	  <!--//oe_comment End-->
+    <script type="text/javascript">
+    $(function(){
+        _getCommPageList(1);
+    });
+    </script>
+  </div>
+  <!--//left End -->
+  
+  <div class="right">
+  
+    <!--<div class="story_hot">
+      <div class="hd">
+        <span>最新案例</span> <i></i> <label><a href="https://e.oephp.com/story/" rel="nofollow">more</a></label>
+      </div>
+      <div class="bd">
+        <div class="layui-collapse" lay-accordion="">
+           
+                    <div class="layui-colla-item">
+            <h2 class="layui-colla-title">01. 我们要结婚了</h2>
+            <div class="layui-colla-content layui-show">
+              <a href="https://e.oephp.com/story/7.html"><img src="https://e.oephp.com/data/attachment/story/201704/08/e5c3ab471281ae04.jpg" /></a>
+            </div>
+          </div>
+                    <div class="layui-colla-item">
+            <h2 class="layui-colla-title">02. 这就是我老婆</h2>
+            <div class="layui-colla-content">
+              <a href="https://e.oephp.com/story/6.html"><img src="https://e.oephp.com/data/attachment/story/201704/08/83fec0b069163bc6.jpg" /></a>
+            </div>
+          </div>
+                    <div class="layui-colla-item">
+            <h2 class="layui-colla-title">03. 我们订婚了</h2>
+            <div class="layui-colla-content">
+              <a href="https://e.oephp.com/story/5.html"><img src="https://e.oephp.com/data/attachment/story/201704/08/df175d984d413382.jpg" /></a>
+            </div>
+          </div>
+                    <div class="layui-colla-item">
+            <h2 class="layui-colla-title">04. 爱就要大声说出来</h2>
+            <div class="layui-colla-content">
+              <a href="https://e.oephp.com/story/4.html"><img src="https://e.oephp.com/data/attachment/story/201704/08/65be05a56dd30a90.png.thumb.jpg" /></a>
+            </div>
+          </div>
+                    <div class="layui-colla-item">
+            <h2 class="layui-colla-title">05. 幸福的真谛</h2>
+            <div class="layui-colla-content">
+              <a href="https://e.oephp.com/story/3.html"><img src="https://e.oephp.com/data/attachment/story/201704/08/73b8ec3e9169fd0e.jpg.thumb.jpg" /></a>
+            </div>
+          </div>
+                    <div class="layui-colla-item">
+            <h2 class="layui-colla-title">06. 爱情甜蜜蜜</h2>
+            <div class="layui-colla-content">
+              <a href="https://e.oephp.com/story/2.html"><img src="https://e.oephp.com/data/attachment/story/201704/08/a92f14a8634627cf.jpg.thumb.jpg" /></a>
+            </div>
+          </div>
+                    <div class="layui-colla-item">
+            <h2 class="layui-colla-title">07. 恋爱了</h2>
+            <div class="layui-colla-content">
+              <a href="https://e.oephp.com/story/1.html"><img src="https://e.oephp.com/data/attachment/story/201704/08/1dbb8872210acf5b.jpg.thumb.jpg" /></a>
+            </div>
+          </div>
+                  </div>
+      </div>-->
+      <script type="text/javascript">
+      layui.use(['element', 'layer'], function(){
+          /*
+          var element = layui.element;
+          var layer = layui.layer;
+
+          //监听折叠
+          element.on('collapse(test)', function(data){
+              layer.msg('展开状态：'+ data.show);
+          });
+          */
+      });
+      </script>
+    </div>
+  </div>
+  <div class="clear"></div>
+</div>
+{% endblock %}

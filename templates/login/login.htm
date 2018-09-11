@@ -1,0 +1,135 @@
+﻿{% extends "../base.htm" %}
+
+{% block content %}
+<div id="page-index" class="page" style="background:#ffd7d7;">
+  <div class="oe_nlogin" style="background:url('/static/imgs/loginlogin.png') right 50px no-repeat #ffd7d7;">
+    <div class="oe_nlogincn">
+      <div class="hd">
+        登录网站
+      </div>
+      <div class="bd">
+        {% csrf_token %}
+        <ul>
+          <li>
+            <label>帐号</label>
+            <input type="text" name="loginname" id="loginname" placeholder="用户名/邮箱" class="w1" />
+          </li>
+          <li>
+            <label>密码</label>
+            <input type="password" name="password" id="password" class="w1" />
+          </li>
+          <li class="ma">
+            <label>验证码</label>
+            <input type="text" id="checkcode" name="checkcode" class="w2" />
+			<img id="codeimg" src="/login/verify/" align="middle" />
+		    <a href="javascript:refreshCode();"> 换一张</a>
+          </li>
+          <li class="btn">
+            <a href="javascript:;">
+			  <button id="but_login">登 录</button>
+            </a>
+            <a class="a_2" href="/index.php?c=passport&a=forget">忘记密码</a>
+          </li>
+          <li class="other">
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div style="clear:both;"></div>
+</div>
+{% endblock %}
+
+{% block footer_script %}
+<script language="javascript">
+  $(function(){
+      $("#loginname").bind("click", function(){ //帐号
+          $_val = $(this).val();
+          if ($_val == "用户名/邮箱") {
+              $(this).val("");
+          }
+      });
+      $("#codeimg").bind("click", function(){ //验证码
+          $(this).attr("src", "/login/verify/"+Math.random());
+      });
+  
+      $("#but_login").bind("click", function(){ //注册
+          $_loginname = $("#loginname").val();
+          $_password = $("#password").val();
+          $_checkcode = "";
+  
+          if ($_loginname == "" || $_loginname == "用户名/邮箱") {
+              alert("请填写登录帐号");
+              return false;
+          }
+          if ($_password.length == 0) {
+              alert("请填写登录密码");
+              return false;
+          }
+          $_checkcode = $("#checkcode").val();
+          if ($_checkcode.length == 0) {
+              alert("请填写验证码");
+              return false;
+          }
+                  
+          $forward = "";
+          if ($forward.length == 0) {
+              $forward = "/";
+          }
+          $.ajax({
+              type: "POST",
+              url: "/login/checkLogin/",
+              cache: false,
+              data: {
+          a:"loginpost",
+          loginname:$_loginname, 
+          password:$_password, 
+          checkcode:$_checkcode,
+          // csrfmiddlewaretoken:{{ csrf_token }}
+          csrfmiddlewaretoken:$("input:first").val()
+        },
+              dataType: "json",
+              success: function($data) {
+          if($data.verify) {
+            alert('验证码错误！');
+            return false;
+          }
+          if($data.res) {
+            window.location.href = '/index/index/';
+            return true;
+          } else {
+            alert('登录失败！');
+            return false;
+          }
+          /*
+                  $response = $json.response;
+                  $result = $json.result;
+                  if ($response == "1") {
+                      window.location.href = $forward;
+                  }
+                  else if ($response == "2") {
+                      window.top.location.href = $result;
+                  }
+                  else {
+                      if ($result.length > 0) {
+                          alert($result);
+                      }
+                      else {
+                          alert("登录失败，请检查帐号和密码");
+                      }
+                  }
+          */
+              },
+              error: function() {
+                  alert("登录失败，请检查帐号和密码");
+              }
+          });
+  
+      });
+  
+  });
+    function refreshCode(){
+        $("#codeimg").attr("src", "/login/verify/"+Math.random());
+    }
+  </script>
+{% endblock %}

@@ -1,0 +1,103 @@
+﻿{% extends '../base.htm' %}
+
+{% block content %}
+<style type="text/css">
+  body{background:#EDEFF5;}
+</style>
+<div class="oe_case_list">
+  <div class="left">
+        <div class="oe_datalist">
+          {% for s in successcase %}
+          <dl class="dl_2 nLi ">
+            <dt><a href="/index/successdetail/{{ s.id }}/"><img src="/{{ s.cover }}" /></a></dt>
+            <dd class="sub"  style="display:none;" >
+              <p class="p_1"></p>
+              <div>
+                <h3><a href="/index/successdetail/{{ s.id }}/">{{ s.title }}</a></h3>
+                <p>目前状态：{{ s.status }}</p>
+                <p class="p_2"><a href="/index/successdetail/{{ s.id }}/">查看详情</a></p>
+              </div>
+            </dd>
+          </dl>
+          {% endfor %}
+          <div class="clear"></div>
+        </div>
+        
+      </div>
+      <!--<div class="right">
+        <div class="oe_rightcase">
+          <h3><span>幸福瞬间</span></h3>
+          <div class="oe_rightcasecon">
+          <ul>
+            <li>
+              <p class="img">
+                <a href="/index.php?c=case&a=detail&id=4"><img src="/data/attachment/story/201712/07/55c3837197faf28f.jpg.thumb.jpg" /></a>
+              </p>
+              <h4><a href="/index.php?c=case&a=detail&id=4">这就是我老婆</a></h4>
+            </li>
+          </ul>
+                    <ul>
+            <li>
+              <p class="img">
+                <a href="/index.php?c=case&a=detail&id=3"><img src="/data/attachment/story/201712/07/d528d3ae8ceea898.jpg.thumb.jpg" /></a>
+              </p>
+              <h4><a href="/index.php?c=case&a=detail&id=3">幸福的真谛</a></h4>
+            </li>
+          </ul>
+                    <ul>
+            <li>
+              <p class="img">
+                <a href="/index.php?c=case&a=detail&id=2"><img src="/data/attachment/story/201712/07/3c8b945bc28d526e.jpg.thumb.jpg" /></a>
+              </p>
+              <h4><a href="/index.php?c=case&a=detail&id=2">我们要结婚了</a></h4>
+            </li>
+          </ul>
+                    <ul>
+            <li>
+              <p class="img">
+                <a href="/index.php?c=case&a=detail&id=1"><img src="/data/attachment/story/201712/07/1c25d67c50744558.jpg" /></a>
+              </p>
+              <h4><a href="/index.php?c=case&a=detail&id=1">张先生和王小姐的爱情故事</a></h4>
+            </li>
+          </ul>
+                    </div>
+        </div>
+      </div>
+      <div class="clear"></div>-->
+</div>
+{% endblock %} 
+     
+{% block footer_script %}
+<script type="text/javascript">
+  jQuery(".oe_case_list").slide({ type:"menu", titCell:".nLi", targetCell:".sub",effect:"slideDown",delayTime:300,triggerTime:0});
+</script>
+<script type='text/javascript'>
+//WAP提醒
+$(function(){
+    var x = 10;  
+    var y = 20;
+    $("a.waptips").mouseover(function(e){
+           this.myTitle = this.title;
+        this.title = "";    
+        var tooltip = "<div id='waptips'>"+ this.myTitle +"<\/div>"; //创建 div 元素
+        $("body").append(tooltip);    //把它追加到文档中
+        $("#waptips")
+            .css({
+                "top": (e.pageY+y) + "px",
+                "left": (e.pageX+x)  + "px"
+            }).show("fast");      //设置x坐标和y坐标，并且显示
+    }).mouseout(function(){        
+        this.title = this.myTitle;
+        $("#waptips").remove();   //移除 
+    }).mousemove(function(e){
+        $("#waptips")
+            .css({
+                "top": (e.pageY+y) + "px",
+                "left": (e.pageX+x)  + "px"
+            });
+    });
+})
+jQuery(".drop").slide({ type:"menu", titCell:".cin", targetCell:".sub",effect:"slideDown",delayTime:300,triggerTime:0,defaultPlay:false,returnDefault:true});
+</script>
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"7","bdPos":"right","bdTop":"100"},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+{% endblock %}
